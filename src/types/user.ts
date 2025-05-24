@@ -7,6 +7,7 @@ export interface User {
     age: number;
     userPath?: UserPath;
     profileCompleted: boolean;
+    isFirstLogin: boolean;
     createdAt: Date;
   }
   

@@ -1,49 +1,212 @@
-export const AboutSection = () => {
+import { useState } from 'react';
+import { Brain, Target, Globe, Zap, Shield, Award, X } from 'lucide-react';
+
+interface AboutSectionProps {
+    onGetStarted?: () => void;
+}
+
+export const AboutSection = ({ onGetStarted }: AboutSectionProps) => {
+    const [showAppPopup, setShowAppPopup] = useState(false);
+
+    const features = [
+        {
+            icon: <Brain className="w-8 h-8 text-white" />,
+            emoji: '🧠',
+            title: 'Inteligență Artificială',
+            description: 'Algoritmul nostru analizează preferințele tale și recomandă cea mai potrivită experiență de călătorie.',
+            gradient: 'from-blue-500 to-purple-600',
+            delay: 'delay-100'
+        },
+        {
+            icon: <Target className="w-8 h-8 text-white" />,
+            emoji: '🎯',
+            title: 'Personalizare Completă',
+            description: '4 căi distincte: Gamer, Explorer Advanced, Explorer Beginner și Senior-Friendly.',
+            gradient: 'from-green-500 to-teal-600',
+            delay: 'delay-200'
+        },
+        {
+            icon: <Globe className="w-8 h-8 text-white" />,
+            emoji: '🌍',
+            title: 'Destinații Unice',
+            description: 'De la hidden gems pentru exploratori la destinații populare pentru începători.',
+            gradient: 'from-orange-500 to-red-600',
+            delay: 'delay-300'
+        },
+        {
+            icon: <Zap className="w-8 h-8 text-white" />,
+            emoji: '⚡',
+            title: 'Planificare Rapidă',
+            description: 'Planifică călătoriile în câteva minute cu AI-ul nostru avansat și recomandările personalizate.',
+            gradient: 'from-yellow-500 to-orange-500',
+            delay: 'delay-400'
+        },
+        {
+            icon: <Shield className="w-8 h-8 text-white" />,
+            emoji: '🛡️',
+            title: 'Călătorii Sigure',
+            description: 'Verificăm toate destinațiile și partenerii pentru siguranța și confortul tău.',
+            gradient: 'from-emerald-500 to-green-600',
+            delay: 'delay-500'
+        },
+        {
+            icon: <Award className="w-8 h-8 text-white" />,
+            emoji: '🏆',
+            title: 'Experiențe Premium',
+            description: 'Accesul exclusiv la experiențe de călătorie premium și oferte speciale.',
+            gradient: 'from-indigo-500 to-purple-600',
+            delay: 'delay-600'
+        }
+    ];
+
     return (
-        <section id="about" className="py-20 bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                        De ce TravelQuest?
+        <section id="about" className="py-24 bg-white relative overflow-hidden">
+            {/* Background decoration */}
+            <div className="absolute inset-0 opacity-40">
+                <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full mix-blend-multiply filter blur-3xl"></div>
+                <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-br from-green-100 to-teal-100 rounded-full mix-blend-multiply filter blur-3xl"></div>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-orange-100 to-red-100 rounded-full mix-blend-multiply filter blur-3xl"></div>
+            </div>
+
+            <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="text-center mb-20">
+                    <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 rounded-full text-sm font-medium mb-6">
+                        💡 Despre Trajecta
+                    </div>
+                    <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                        De ce să alegi
+                        <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-orange-600">
+                            Trajecta?
+                        </span>
                     </h2>
-                    <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                    <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
                         Prima aplicație de călătorii care se adaptează personalității și experienței tale.
-                        Nu mai căuta prin sute de opțiuni - primești exact ce ai nevoie.
+                        Nu mai căuta prin sute de opțiuni - primești exact ce ai nevoie pentru aventura perfectă.
                     </p>
                 </div>
 
-                <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-                    <div className="text-center">
-                        <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <span className="text-2xl">🧠</span>
-                        </div>
-                        <h3 className="text-xl font-semibold mb-2">Inteligență Artificială</h3>
-                        <p className="text-gray-600">
-                            Algoritmul nostru analizează preferințele tale și recomandă cea mai potrivită experiență.
-                        </p>
-                    </div>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    {features.map((feature, index) => (
+                        <div key={index} className={`group animate-fadeInUp ${feature.delay} h-full`}>
+                            <div className="bg-white/70 backdrop-blur-sm rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 border border-gray-100 h-full flex flex-col">
+                                {/* Icon container */}
+                                <div className="relative mb-6">
+                                    <div className={`w-20 h-20 bg-gradient-to-r ${feature.gradient} rounded-2xl flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                                        {feature.icon}
+                                    </div>
+                                    <div className="absolute -top-2 -right-2 text-3xl group-hover:scale-125 transition-transform duration-300">
+                                        {feature.emoji}
+                                    </div>
+                                </div>
 
-                    <div className="text-center">
-                        <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <span className="text-2xl">🎯</span>
-                        </div>
-                        <h3 className="text-xl font-semibold mb-2">Personalizare Completă</h3>
-                        <p className="text-gray-600">
-                            4 căi distincte: Gamer, Explorer Advanced, Explorer Beginner și Senior-Friendly.
-                        </p>
-                    </div>
+                                <h3 className="text-xl font-bold mb-4 text-center group-hover:text-blue-600 transition-colors duration-300">
+                                    {feature.title}
+                                </h3>
+                                <p className="text-gray-600 text-center leading-relaxed flex-grow">
+                                    {feature.description}
+                                </p>
 
-                    <div className="text-center">
-                        <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <span className="text-2xl">🌍</span>
+                                {/* Hover effect line */}
+                                <div className="mt-6 h-1 bg-gradient-to-r from-transparent via-blue-400 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                            </div>
                         </div>
-                        <h3 className="text-xl font-semibold mb-2">Destinații Unice</h3>
-                        <p className="text-gray-600">
-                            De la hidden gems pentru exploratori la destinații populare pentru începători.
-                        </p>
+                    ))}
+                </div>
+
+                {/* CTA Section */}
+                <div className="mt-20 text-center">
+                    <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-orange-600 rounded-3xl p-12 text-white relative overflow-hidden">
+                        {/* Background pattern */}
+                        <div className="absolute inset-0 opacity-10">
+                            <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2250%22%20height%3D%2250%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22white%22%20fill-opacity%3D%220.3%22%3E%3Ccircle%20cx%3D%2225%22%20cy%3D%2225%22%20r%3D%222%22/%3E%3C/g%3E%3C/svg%3E')] bg-repeat"></div>
+                        </div>
+
+                        <div className="relative z-10">
+                            <h3 className="text-3xl md:text-4xl font-bold mb-4">
+                                Gata să îți începi aventura?
+                            </h3>
+                            <p className="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
+                                Alătură-te comunității de peste 10,000 de călători care au descoperit deja lumea cu Trajecta.
+                            </p>
+                            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                                <button 
+                                    onClick={onGetStarted}
+                                    className="bg-white text-blue-600 font-semibold px-8 py-4 rounded-2xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg"
+                                >
+                                    🚀 Începe Acum
+                                </button>
+                                <button 
+                                    onClick={() => setShowAppPopup(true)}
+                                    className="bg-white/20 backdrop-blur-sm border border-white/30 text-white font-semibold px-8 py-4 rounded-2xl hover:bg-white/30 transition-all duration-300 transform hover:scale-105"
+                                >
+                                    📱 Descarcă App-ul
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            {/* App Download Popup */}
+            {showAppPopup && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-3xl p-8 max-w-md w-full mx-4 transform animate-slideInUp shadow-2xl">
+                        <div className="text-center">
+                            {/* Close button */}
+                            <button
+                                onClick={() => setShowAppPopup(false)}
+                                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                            >
+                                <X className="w-6 h-6" />
+                            </button>
+
+                            {/* Icon */}
+                            <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <span className="text-4xl">📱</span>
+                            </div>
+
+                            {/* Title */}
+                            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                                App-ul Mobile Trajecta
+                            </h3>
+
+                            {/* Message */}
+                            <p className="text-gray-600 mb-6 leading-relaxed">
+                                Aplicația mobilă va fi disponibilă în curând! 🚀
+                                <br />
+                                <span className="text-sm">Stai pe fază pentru actualizări.</span>
+                            </p>
+
+                            {/* Progress indicator */}
+                            <div className="mb-6">
+                                <div className="bg-gray-200 rounded-full h-2 mb-2">
+                                    <div className="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full w-3/4 animate-pulse"></div>
+                                </div>
+                                <p className="text-sm text-gray-500">În dezvoltare: 75%</p>
+                            </div>
+
+                            {/* Actions */}
+                            <div className="space-y-3">
+                                <button
+                                    onClick={() => setShowAppPopup(false)}
+                                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-3 px-6 rounded-2xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105"
+                                >
+                                    ✨ Perfect, voi aștepta!
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setShowAppPopup(false);
+                                        onGetStarted?.();
+                                    }}
+                                    className="w-full bg-gray-100 text-gray-700 font-medium py-3 px-6 rounded-2xl hover:bg-gray-200 transition-all duration-300"
+                                >
+                                    🌐 Încearcă versiunea web
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </section>
     );
 };

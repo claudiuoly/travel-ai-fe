@@ -96,9 +96,10 @@ export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }: RegisterModa
             if (success) {
                 toast({
                     title: "Înregistrare reușită!",
-                    description: "Contul tău a fost creat cu succes.",
+                    description: "Contul tău a fost creat cu succes. Te poți conecta acum cu credențialele tale.",
                 });
                 onClose();
+                onSwitchToLogin();
             } else {
                 toast({
                     title: "Eroare de înregistrare",

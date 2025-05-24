@@ -8,6 +8,7 @@ interface AuthContextType {
   register: (userData: RegisterData) => Promise<boolean>;
   logout: () => void;
   updateUser: (user: User) => void;
+  markFirstLoginComplete: () => void;
   isLoading: boolean;
 }
 
@@ -38,7 +39,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const storedUser = localStorage.getItem('travel_user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      const userData = JSON.parse(storedUser);
+      // Ensure backward compatibility - if isFirstLogin is not set, default to false
+      if (userData.isFirstLogin === undefined) {
+        userData.isFirstLogin = false;
+      }
+      setUser(userData);
     }
     setIsLoading(false);
   }, []);
@@ -52,7 +58,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return false;
       }
 
-      const { user: userData, token } = response.data;
+      const { user: userData, token, is_first_login } = response.data;
       
       const user: User = {
         id: userData.id,
@@ -62,6 +68,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         username: userData.username,
         age: userData.age,
         profileCompleted: userData.profile_completed || false,
+        isFirstLogin: is_first_login === true,
         createdAt: new Date()
       };
       
@@ -99,27 +106,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return false;
       }
 
-      const { user: newUserData, token } = response.data;
-      
-      const newUser: User = {
-        id: newUserData.id,
-        fullName: newUserData.full_name,
-        email: newUserData.email,
-        phone: newUserData.phone,
-        username: newUserData.username,
-        age: newUserData.age,
-        profileCompleted: false,
-        createdAt: new Date()
-      };
-      
-      setUser(newUser);
-      localStorage.setItem('travel_user', JSON.stringify(newUser));
-      
-      // Store token if provided
-      if (token) {
-        localStorage.setItem('auth_token', token);
-      }
-      
+      // Don't auto-login after registration - user should login manually
       return true;
     } catch (error) {
       console.error('Register error:', error);
@@ -140,6 +127,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('travel_user', JSON.stringify(updatedUser));
   };
 
+  const markFirstLoginComplete = () => {
+    if (user) {
+      const updatedUser = { ...user, isFirstLogin: false };
+      setUser(updatedUser);
+      localStorage.setItem('travel_user', JSON.stringify(updatedUser));
+    }
+  };
+
   return (
     <AuthContext.Provider value={{
       user,
@@ -147,6 +142,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       register,
       logout,
       updateUser,
+      markFirstLoginComplete,
       isLoading
     }}>
       {children}

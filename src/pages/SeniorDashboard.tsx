@@ -19,7 +19,7 @@ export const SeniorDashboard = () => {
           <div className="space-y-6">
             <div className="text-center">
               <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                🌟 Bun venit la TravelQuest Senior-Friendly! 👴👵
+                🌟 Bun venit la Trajecta Senior-Friendly! 👴👵
               </h1>
               <p className="text-xl text-gray-600 mb-8">
                 Interfața simplă și accesibilă pentru călătorii liniștite
@@ -94,8 +94,8 @@ export const SeniorDashboard = () => {
         {showChatBot && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-lg w-full max-w-4xl h-[80vh] flex flex-col">
-              <div className="flex justify-between items-center p-4 border-b">
-                <h2 className="text-xl font-semibold">Asistent Virtual TravelQuest</h2>
+              <div className="flex justify-between items-center p-4 border-b border-orange-600">
+                <h2 className="text-xl font-semibold text-orange-100">Asistent Virtual Trajecta</h2>
                 <Button variant="outline" onClick={() => setShowChatBot(false)}>
                   ✕ Închide
                 </Button>

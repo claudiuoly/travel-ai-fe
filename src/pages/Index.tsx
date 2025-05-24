@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { Header } from "@/components/layout/Header";
 import { HeroSection } from "@/components/sections/HeroSection";
+import { FeaturesSection } from "@/components/sections/FeaturesSection";
+import { AboutSection } from "@/components/sections/AboutSection";
+import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { LoginModal } from "@/components/auth/LoginModal";
 import { RegisterModal } from "@/components/auth/RegisterModal";
 import { ProfileQuiz } from "@/components/quiz/ProfileQuiz";
@@ -11,7 +14,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 const Index = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const [showQuiz, setShowQuiz] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -24,24 +27,35 @@ const Index = () => {
   useEffect(() => {
     if (user) {
       if (user.userPath) {
+        // User has a path selected, go to dashboard
         navigateToDashboard(user.userPath.type);
-      } else if (user.profileCompleted) {
-        // User has completed profile but no path selected, show manual selection
-        setShowManualSelection(true);
-      } else {
-        // User not completed profile, show quiz
+      } else if (user.isFirstLogin) {
+        // First login - show quiz
         setShowQuiz(true);
+      } else {
+        // Not first login - skip quiz, show manual selection or go to beginner dashboard
+        if (user.profileCompleted) {
+          setShowManualSelection(true);
+        } else {
+          // Default to beginner dashboard if no path selected and not first login
+          navigateToDashboard('explorer-beginner');
+        }
       }
     }
   }, [user]);
 
   const handleGetStarted = () => {
     if (user) {
-      // User is logged in, start quiz or go to dashboard
-      if (!user.profileCompleted) {
+      // User is logged in
+      if (user.isFirstLogin) {
+        // First login - show quiz
         setShowQuiz(true);
+      } else if (user.userPath) {
+        // Has path - go to dashboard
+        navigateToDashboard(user.userPath.type);
       } else {
-        navigateToDashboard(user.userPath?.type);
+        // Not first login and no path - show manual selection
+        setShowManualSelection(true);
       }
     } else {
       // User not logged in, show register modal
@@ -77,20 +91,40 @@ const Index = () => {
     setShowQuiz(false);
     setQuizCompleted(true);
     setUserPath(userPath);
+    
+    // Don't mark first login as complete yet - do it when user makes a choice
   };
 
   const handleAcceptRecommendation = () => {
+    if (userPath && user) {
+      // Update user with selected path and mark first login complete
+      const updatedUser = { ...user, userPath, profileCompleted: true, isFirstLogin: false };
+      updateUser(updatedUser);
+    }
+    
     setPathSelected(true);
     setQuizCompleted(false);
     navigateToDashboard();
   };
 
   const handleTryAllPaths = () => {
+    if (user) {
+      // Mark profile as completed and first login complete
+      const updatedUser = { ...user, profileCompleted: true, isFirstLogin: false };
+      updateUser(updatedUser);
+    }
+    
     setQuizCompleted(false);
     setShowManualSelection(true);
   };
 
   const handleChooseManually = () => {
+    if (user) {
+      // Mark profile as completed and first login complete
+      const updatedUser = { ...user, profileCompleted: true, isFirstLogin: false };
+      updateUser(updatedUser);
+    }
+    
     setQuizCompleted(false);
     setShowManualSelection(true);
   };
@@ -170,6 +204,65 @@ const Index = () => {
       />
       
       <HeroSection onGetStarted={handleGetStarted} />
+      
+      <FeaturesSection />
+      
+      <AboutSection onGetStarted={handleGetStarted} />
+      
+      <TestimonialsSection onGetStarted={handleGetStarted} />
+      
+      {/* Footer Section */}
+      <footer className="bg-gray-900 text-white py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-4 gap-8">
+            <div className="md:col-span-2">
+              <div className="flex items-center mb-4">
+                <span className="text-2xl font-bold text-blue-400">🌍 Trajecta</span>
+              </div>
+              <p className="text-gray-300 mb-4 max-w-md">
+                Descoperă lumea cu aplicația de călătorii personalizată care se adaptează stilului tău de viață.
+              </p>
+              <div className="flex space-x-4">
+                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                  <span className="sr-only">Facebook</span>
+                  📘
+                </a>
+                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                  <span className="sr-only">Instagram</span>
+                  📸
+                </a>
+                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                  <span className="sr-only">Twitter</span>
+                  🐦
+                </a>
+              </div>
+            </div>
+            
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Legături Utile</h3>
+              <ul className="space-y-2">
+                <li><a href="#about" className="text-gray-300 hover:text-white transition-colors">Despre</a></li>
+                <li><a href="#features" className="text-gray-300 hover:text-white transition-colors">Caracteristici</a></li>
+                <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Prețuri</a></li>
+                <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Blog</a></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Contact</h3>
+              <ul className="space-y-2 text-gray-300">
+                <li>📧 contact@trajecta.ro</li>
+                <li>📞 +40 123 456 789</li>
+                <li>📍 București, România</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+            <p>&copy; 2024 Trajecta. Toate drepturile rezervate.</p>
+          </div>
+        </div>
+      </footer>
 
       <LoginModal
         isOpen={showLoginModal}
