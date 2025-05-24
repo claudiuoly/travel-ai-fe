@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronDown } from 'lucide-react';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface CountrySelectorProps {
     value: string;
@@ -41,6 +42,7 @@ const COUNTRIES = [
 export const CountrySelector = ({ value, onChange }: CountrySelectorProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+    const { t } = useTranslation();
 
     const filteredCountries = COUNTRIES.filter(country =>
         country.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -57,7 +59,7 @@ export const CountrySelector = ({ value, onChange }: CountrySelectorProps) => {
             >
         <span className="flex items-center space-x-2">
           {selectedCountry && <span className="text-xl">{selectedCountry.flag}</span>}
-            <span>{value || 'Selectați țara'}</span>
+            <span>{value || t('profile.countrySelector.placeholder')}</span>
         </span>
                 <ChevronDown className="w-5 h-5" />
             </Button>
@@ -67,7 +69,7 @@ export const CountrySelector = ({ value, onChange }: CountrySelectorProps) => {
                     <div className="p-3 border-b">
                         <input
                             type="text"
-                            placeholder="Căutați țara..."
+                            placeholder={t('profile.countrySelector.search')}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"

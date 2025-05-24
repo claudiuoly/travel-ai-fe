@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface RegisterModalProps {
     isOpen: boolean;
@@ -32,41 +33,42 @@ export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }: RegisterModa
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const { register } = useAuth();
+    const { t } = useTranslation();
 
     const validateForm = () => {
         const newErrors: Record<string, string> = {};
 
         if (!formData.fullName.trim()) {
-            newErrors.fullName = 'Numele complet este obligatoriu';
+            newErrors.fullName = t('auth.register.validation.fullNameRequired');
         }
 
         if (!formData.email.includes('@')) {
-            newErrors.email = 'Email invalid';
+            newErrors.email = t('auth.register.validation.emailInvalid');
         }
 
         if (!/^\+?[\d\s-()]+$/.test(formData.phone)) {
-            newErrors.phone = 'Număr de telefon invalid';
+            newErrors.phone = t('auth.register.validation.phoneInvalid');
         }
 
         if (formData.username.length < 3) {
-            newErrors.username = 'Username-ul trebuie să aibă minim 3 caractere';
+            newErrors.username = t('auth.register.validation.usernameMinLength');
         }
 
         if (formData.password.length < 6) {
-            newErrors.password = 'Parola trebuie să aibă minim 6 caractere';
+            newErrors.password = t('auth.register.validation.passwordMinLength');
         }
 
         if (formData.password !== formData.confirmPassword) {
-            newErrors.confirmPassword = 'Parolele nu coincid';
+            newErrors.confirmPassword = t('auth.register.validation.passwordsNotMatch');
         }
 
         const age = parseInt(formData.age);
         if (!age || age < 13 || age > 120) {
-            newErrors.age = 'Vârsta trebuie să fie între 13 și 120 de ani';
+            newErrors.age = t('auth.register.validation.ageInvalid');
         }
 
         if (!formData.acceptTerms) {
-            newErrors.acceptTerms = 'Trebuie să accepți termenii și condițiile';
+            newErrors.acceptTerms = t('auth.register.validation.termsRequired');
         }
 
         setErrors(newErrors);
@@ -95,22 +97,22 @@ export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }: RegisterModa
 
             if (success) {
                 toast({
-                    title: "Înregistrare reușită!",
-                    description: "Contul tău a fost creat cu succes. Te poți conecta acum cu credențialele tale.",
+                    title: t('auth.register.success.title'),
+                    description: t('auth.register.success.description'),
                 });
                 onClose();
                 onSwitchToLogin();
             } else {
                 toast({
-                    title: "Eroare de înregistrare",
-                    description: "Datele introduse sunt invalide sau utilizatorul există deja. Verifică informațiile și încearcă din nou.",
+                    title: t('auth.register.errors.invalidData.title'),
+                    description: t('auth.register.errors.invalidData.description'),
                     variant: "destructive",
                 });
             }
         } catch (error) {
             toast({
-                title: "Eroare de înregistrare",
-                description: "Nu s-a putut conecta la server. Verifică conexiunea la internet și încearcă din nou.",
+                title: t('auth.register.errors.serverError.title'),
+                description: t('auth.register.errors.serverError.description'),
                 variant: "destructive",
             });
         } finally {
@@ -128,7 +130,13 @@ export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }: RegisterModa
     };
 
     const passwordStrength = getPasswordStrength(formData.password);
-    const strengthLabels = ['Foarte slabă', 'Slabă', 'Medie', 'Tare', 'Foarte tare'];
+    const strengthLabels = [
+        t('auth.register.passwordStrength.veryWeak'), 
+        t('auth.register.passwordStrength.weak'), 
+        t('auth.register.passwordStrength.medium'), 
+        t('auth.register.passwordStrength.strong'), 
+        t('auth.register.passwordStrength.veryStrong')
+    ];
     const strengthColors = ['bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-blue-500', 'bg-green-500'];
 
     return (
@@ -136,17 +144,17 @@ export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }: RegisterModa
             <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle className="text-2xl font-bold text-center">
-                        Înregistrare
+                        {t('auth.register.title')}
                     </DialogTitle>
                 </DialogHeader>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <Label htmlFor="fullName">Nume complet *</Label>
+                        <Label htmlFor="fullName">{t('auth.register.fullName')} *</Label>
                         <Input
                             id="fullName"
                             type="text"
-                            placeholder="Introdu numele complet"
+                            placeholder={t('auth.register.fullNamePlaceholder')}
                             value={formData.fullName}
                             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                             className={`mt-1 ${errors.fullName ? 'border-red-500' : ''}`}
@@ -156,11 +164,11 @@ export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }: RegisterModa
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <Label htmlFor="email">Email *</Label>
+                            <Label htmlFor="email">{t('auth.register.email')} *</Label>
                             <Input
                                 id="email"
                                 type="email"
-                                placeholder="email@exemplu.com"
+                                placeholder={t('auth.register.emailPlaceholder')}
                                 value={formData.email}
                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                 className={`mt-1 ${errors.email ? 'border-red-500' : ''}`}
@@ -169,11 +177,11 @@ export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }: RegisterModa
                         </div>
 
                         <div>
-                            <Label htmlFor="phone">Telefon *</Label>
+                            <Label htmlFor="phone">{t('auth.register.phone')} *</Label>
                             <Input
                                 id="phone"
                                 type="tel"
-                                placeholder="+40123456789"
+                                placeholder={t('auth.register.phonePlaceholder')}
                                 value={formData.phone}
                                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                 className={`mt-1 ${errors.phone ? 'border-red-500' : ''}`}
@@ -184,11 +192,11 @@ export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }: RegisterModa
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <Label htmlFor="username">Username *</Label>
+                            <Label htmlFor="username">{t('auth.register.username')} *</Label>
                             <Input
                                 id="username"
                                 type="text"
-                                placeholder="username_unic"
+                                placeholder={t('auth.register.usernamePlaceholder')}
                                 value={formData.username}
                                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                                 className={`mt-1 ${errors.username ? 'border-red-500' : ''}`}
@@ -197,11 +205,11 @@ export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }: RegisterModa
                         </div>
 
                         <div>
-                            <Label htmlFor="age">Vârsta *</Label>
+                            <Label htmlFor="age">{t('auth.register.age')} *</Label>
                             <Input
                                 id="age"
                                 type="number"
-                                placeholder="25"
+                                placeholder={t('auth.register.agePlaceholder')}
                                 min="13"
                                 max="120"
                                 value={formData.age}
@@ -213,11 +221,11 @@ export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }: RegisterModa
                     </div>
 
                     <div>
-                        <Label htmlFor="password">Parolă *</Label>
+                        <Label htmlFor="password">{t('auth.register.password')} *</Label>
                         <Input
                             id="password"
                             type="password"
-                            placeholder="Parolă sigură"
+                            placeholder={t('auth.register.passwordPlaceholder')}
                             value={formData.password}
                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                             className={`mt-1 ${errors.password ? 'border-red-500' : ''}`}
@@ -235,7 +243,7 @@ export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }: RegisterModa
                                     ))}
                                 </div>
                                 <p className="text-xs mt-1 text-gray-600">
-                                    Puterea parolei: {strengthLabels[passwordStrength] || strengthLabels[0]}
+                                    {t('auth.register.passwordStrength.label')} {strengthLabels[passwordStrength] || strengthLabels[0]}
                                 </p>
                             </div>
                         )}
@@ -243,11 +251,11 @@ export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }: RegisterModa
                     </div>
 
                     <div>
-                        <Label htmlFor="confirmPassword">Confirmă parola *</Label>
+                        <Label htmlFor="confirmPassword">{t('auth.register.confirmPassword')} *</Label>
                         <Input
                             id="confirmPassword"
                             type="password"
-                            placeholder="Confirmă parola"
+                            placeholder={t('auth.register.confirmPasswordPlaceholder')}
                             value={formData.confirmPassword}
                             onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                             className={`mt-1 ${errors.confirmPassword ? 'border-red-500' : ''}`}
@@ -265,13 +273,13 @@ export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }: RegisterModa
                             className={errors.acceptTerms ? 'border-red-500' : ''}
                         />
                         <Label htmlFor="acceptTerms" className="text-sm leading-relaxed">
-                            Accept{' '}
+                            {t('auth.register.acceptTerms')}{' '}
                             <Button variant="link" className="p-0 h-auto text-sm">
-                                termenii și condițiile
+                                {t('auth.register.termsAndConditions')}
                             </Button>{' '}
-                            și{' '}
+                            {t('auth.register.and')}{' '}
                             <Button variant="link" className="p-0 h-auto text-sm">
-                                politica de confidențialitate
+                                {t('auth.register.privacyPolicy')}
                             </Button>
                         </Label>
                     </div>
@@ -282,18 +290,18 @@ export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }: RegisterModa
                         className="w-full"
                         disabled={isLoading}
                     >
-                        {isLoading ? 'Se înregistrează...' : 'Creează cont'}
+                        {isLoading ? t('auth.register.registerButtonLoading') : t('auth.register.registerButton')}
                     </Button>
 
                     <div className="text-center">
-                        <span className="text-sm text-gray-600">Ai deja cont? </span>
+                        <span className="text-sm text-gray-600">{t('auth.register.hasAccount')} </span>
                         <Button
                             variant="link"
                             className="p-0 h-auto text-sm font-semibold"
                             onClick={onSwitchToLogin}
                             type="button"
                         >
-                            Conectează-te
+                            {t('auth.register.loginLink')}
                         </Button>
                     </div>
                 </form>

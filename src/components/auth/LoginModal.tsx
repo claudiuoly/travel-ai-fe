@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface LoginModalProps {
     isOpen: boolean;
@@ -26,6 +27,7 @@ export const LoginModal = ({ isOpen, onClose, onSwitchToRegister }: LoginModalPr
     });
     const [isLoading, setIsLoading] = useState(false);
     const { login } = useAuth();
+    const { t } = useTranslation();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -35,21 +37,21 @@ export const LoginModal = ({ isOpen, onClose, onSwitchToRegister }: LoginModalPr
             const success = await login(formData.identifier, formData.password);
             if (success) {
                 toast({
-                    title: "Conectare reușită!",
-                    description: "Bun venit înapoi!",
+                    title: t('auth.login.success.title'),
+                    description: t('auth.login.success.description'),
                 });
                 onClose();
             } else {
                 toast({
-                    title: "Eroare de conectare",
-                    description: "Email/telefon/username sau parolă incorrecte. Verifică datele introduse și încearcă din nou.",
+                    title: t('auth.login.errors.invalidCredentials.title'),
+                    description: t('auth.login.errors.invalidCredentials.description'),
                     variant: "destructive",
                 });
             }
         } catch (error) {
             toast({
-                title: "Eroare de conectare",
-                description: "Nu s-a putut conecta la server. Verifică conexiunea la internet și încearcă din nou.",
+                title: t('auth.login.errors.serverError.title'),
+                description: t('auth.login.errors.serverError.description'),
                 variant: "destructive",
             });
         } finally {
@@ -58,9 +60,9 @@ export const LoginModal = ({ isOpen, onClose, onSwitchToRegister }: LoginModalPr
     };
 
     const detectInputType = (value: string) => {
-        if (value.includes('@')) return 'email';
-        if (/^\+?[\d\s-()]+$/.test(value)) return 'telefon';
-        return 'username';
+        if (value.includes('@')) return t('auth.login.types.email');
+        if (/^\+?[\d\s-()]+$/.test(value)) return t('auth.login.types.telefon');
+        return t('auth.login.types.username');
     };
 
     return (
@@ -68,17 +70,17 @@ export const LoginModal = ({ isOpen, onClose, onSwitchToRegister }: LoginModalPr
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                     <DialogTitle className="text-2xl font-bold text-center">
-                        Conectare
+                        {t('auth.login.title')}
                     </DialogTitle>
                 </DialogHeader>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <Label htmlFor="identifier">Email / Telefon / Username</Label>
+                        <Label htmlFor="identifier">{t('auth.login.identifier')}</Label>
                         <Input
                             id="identifier"
                             type="text"
-                            placeholder="Introdu email, telefon sau username"
+                            placeholder={t('auth.login.identifierPlaceholder')}
                             value={formData.identifier}
                             onChange={(e) => setFormData({ ...formData, identifier: e.target.value })}
                             required
@@ -86,17 +88,17 @@ export const LoginModal = ({ isOpen, onClose, onSwitchToRegister }: LoginModalPr
                         />
                         {formData.identifier && (
                             <p className="text-xs text-gray-500 mt-1">
-                                Detectat ca: {detectInputType(formData.identifier)}
+                                {t('auth.login.detected', { type: detectInputType(formData.identifier) })}
                             </p>
                         )}
                     </div>
 
                     <div>
-                        <Label htmlFor="password">Parolă</Label>
+                        <Label htmlFor="password">{t('auth.login.password')}</Label>
                         <Input
                             id="password"
                             type="password"
-                            placeholder="Introdu parola"
+                            placeholder={t('auth.login.passwordPlaceholder')}
                             value={formData.password}
                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                             required
@@ -114,12 +116,12 @@ export const LoginModal = ({ isOpen, onClose, onSwitchToRegister }: LoginModalPr
                                 }
                             />
                             <Label htmlFor="remember" className="text-sm">
-                                Ține-mă minte
+                                {t('auth.login.rememberMe')}
                             </Label>
                         </div>
 
                         <Button variant="link" className="p-0 h-auto text-sm">
-                            Ai uitat parola?
+                            {t('auth.login.forgotPassword')}
                         </Button>
                     </div>
 
@@ -128,18 +130,18 @@ export const LoginModal = ({ isOpen, onClose, onSwitchToRegister }: LoginModalPr
                         className="w-full"
                         disabled={isLoading}
                     >
-                        {isLoading ? 'Se conectează...' : 'Conectare'}
+                        {isLoading ? t('auth.login.loginButtonLoading') : t('auth.login.loginButton')}
                     </Button>
 
                     <div className="text-center">
-                        <span className="text-sm text-gray-600">Nu ai cont? </span>
+                        <span className="text-sm text-gray-600">{t('auth.login.noAccount')} </span>
                         <Button
                             variant="link"
                             className="p-0 h-auto text-sm font-semibold"
                             onClick={onSwitchToRegister}
                             type="button"
                         >
-                            Înregistrează-te
+                            {t('auth.login.registerLink')}
                         </Button>
                     </div>
                 </form>

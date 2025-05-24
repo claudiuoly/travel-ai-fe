@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Brain, Target, Globe, Zap, Shield, Award, X } from 'lucide-react';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface AboutSectionProps {
     onGetStarted?: () => void;
@@ -7,53 +8,54 @@ interface AboutSectionProps {
 
 export const AboutSection = ({ onGetStarted }: AboutSectionProps) => {
     const [showAppPopup, setShowAppPopup] = useState(false);
+    const { t } = useTranslation();
 
     const features = [
         {
             icon: <Brain className="w-8 h-8 text-white" />,
             emoji: '🧠',
-            title: 'Inteligență Artificială',
-            description: 'Algoritmul nostru analizează preferințele tale și recomandă cea mai potrivită experiență de călătorie.',
+            title: t('about.features.ai.title'),
+            description: t('about.features.ai.description'),
             gradient: 'from-blue-500 to-purple-600',
             delay: 'delay-100'
         },
         {
             icon: <Target className="w-8 h-8 text-white" />,
             emoji: '🎯',
-            title: 'Personalizare Completă',
-            description: '4 căi distincte: Gamer, Explorer Advanced, Explorer Beginner și Senior-Friendly.',
+            title: t('about.features.personalization.title'),
+            description: t('about.features.personalization.description'),
             gradient: 'from-green-500 to-teal-600',
             delay: 'delay-200'
         },
         {
             icon: <Globe className="w-8 h-8 text-white" />,
             emoji: '🌍',
-            title: 'Destinații Unice',
-            description: 'De la hidden gems pentru exploratori la destinații populare pentru începători.',
+            title: t('about.features.destinations.title'),
+            description: t('about.features.destinations.description'),
             gradient: 'from-orange-500 to-red-600',
             delay: 'delay-300'
         },
         {
             icon: <Zap className="w-8 h-8 text-white" />,
             emoji: '⚡',
-            title: 'Planificare Rapidă',
-            description: 'Planifică călătoriile în câteva minute cu AI-ul nostru avansat și recomandările personalizate.',
+            title: t('about.features.planning.title'),
+            description: t('about.features.planning.description'),
             gradient: 'from-yellow-500 to-orange-500',
             delay: 'delay-400'
         },
         {
             icon: <Shield className="w-8 h-8 text-white" />,
             emoji: '🛡️',
-            title: 'Călătorii Sigure',
-            description: 'Verificăm toate destinațiile și partenerii pentru siguranța și confortul tău.',
+            title: t('about.features.safety.title'),
+            description: t('about.features.safety.description'),
             gradient: 'from-emerald-500 to-green-600',
             delay: 'delay-500'
         },
         {
             icon: <Award className="w-8 h-8 text-white" />,
             emoji: '🏆',
-            title: 'Experiențe Premium',
-            description: 'Accesul exclusiv la experiențe de călătorie premium și oferte speciale.',
+            title: t('about.features.premium.title'),
+            description: t('about.features.premium.description'),
             gradient: 'from-indigo-500 to-purple-600',
             delay: 'delay-600'
         }
@@ -71,17 +73,16 @@ export const AboutSection = ({ onGetStarted }: AboutSectionProps) => {
             <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-20">
                     <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 rounded-full text-sm font-medium mb-6">
-                        💡 Despre Trajecta
+                        {t('about.badge')}
                     </div>
                     <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-                        De ce să alegi
+                        {t('about.title')}
                         <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-orange-600">
-                            Trajecta?
+                            {t('about.titleHighlight')}
                         </span>
                     </h2>
                     <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-                        Prima aplicație de călătorii care se adaptează personalității și experienței tale.
-                        Nu mai căuta prin sute de opțiuni - primești exact ce ai nevoie pentru aventura perfectă.
+                        {t('about.subtitle')}
                     </p>
                 </div>
 
@@ -123,23 +124,23 @@ export const AboutSection = ({ onGetStarted }: AboutSectionProps) => {
 
                         <div className="relative z-10">
                             <h3 className="text-3xl md:text-4xl font-bold mb-4">
-                                Gata să îți începi aventura?
+                                {t('about.cta.title')}
                             </h3>
                             <p className="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
-                                Alătură-te comunității de peste 10,000 de călători care au descoperit deja lumea cu Trajecta.
+                                {t('about.cta.subtitle')}
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                 <button 
                                     onClick={onGetStarted}
                                     className="bg-white text-blue-600 font-semibold px-8 py-4 rounded-2xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg"
                                 >
-                                    🚀 Începe Acum
+                                    {t('about.cta.startNow')}
                                 </button>
                                 <button 
                                     onClick={() => setShowAppPopup(true)}
                                     className="bg-white/20 backdrop-blur-sm border border-white/30 text-white font-semibold px-8 py-4 rounded-2xl hover:bg-white/30 transition-all duration-300 transform hover:scale-105"
                                 >
-                                    📱 Descarcă App-ul
+                                    {t('about.cta.downloadApp')}
                                 </button>
                             </div>
                         </div>
@@ -167,14 +168,14 @@ export const AboutSection = ({ onGetStarted }: AboutSectionProps) => {
 
                             {/* Title */}
                             <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                                App-ul Mobile Trajecta
+                                {t('about.appPopup.title')}
                             </h3>
 
                             {/* Message */}
                             <p className="text-gray-600 mb-6 leading-relaxed">
-                                Aplicația mobilă va fi disponibilă în curând! 🚀
+                                {t('about.appPopup.message')}
                                 <br />
-                                <span className="text-sm">Stai pe fază pentru actualizări.</span>
+                                <span className="text-sm">{t('about.appPopup.submessage')}</span>
                             </p>
 
                             {/* Progress indicator */}
@@ -182,7 +183,7 @@ export const AboutSection = ({ onGetStarted }: AboutSectionProps) => {
                                 <div className="bg-gray-200 rounded-full h-2 mb-2">
                                     <div className="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full w-3/4 animate-pulse"></div>
                                 </div>
-                                <p className="text-sm text-gray-500">În dezvoltare: 75%</p>
+                                <p className="text-sm text-gray-500">{t('about.appPopup.progress')}</p>
                             </div>
 
                             {/* Actions */}
@@ -191,16 +192,16 @@ export const AboutSection = ({ onGetStarted }: AboutSectionProps) => {
                                     onClick={() => setShowAppPopup(false)}
                                     className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-3 px-6 rounded-2xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105"
                                 >
-                                    ✨ Perfect, voi aștepta!
+                                    {t('about.appPopup.waitButton')}
                                 </button>
                                 <button
                                     onClick={() => {
                                         setShowAppPopup(false);
                                         onGetStarted?.();
                                     }}
-                                    className="w-full bg-gray-100 text-gray-700 font-medium py-3 px-6 rounded-2xl hover:bg-gray-200 transition-all duration-300"
+                                    className="w-full bg-gray-100 text-gray-700 font-semibold py-3 px-6 rounded-2xl hover:bg-gray-200 transition-all duration-300"
                                 >
-                                    🌐 Încearcă versiunea web
+                                    {t('about.appPopup.webButton')}
                                 </button>
                             </div>
                         </div>

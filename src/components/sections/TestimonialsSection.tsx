@@ -1,53 +1,56 @@
 import { Star, Users, MapPin, TrendingUp } from 'lucide-react';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface TestimonialsSectionProps {
     onGetStarted?: () => void;
 }
 
 export const TestimonialsSection = ({ onGetStarted }: TestimonialsSectionProps) => {
+    const { t } = useTranslation();
+    
     const testimonials = [
         {
             name: 'Alex Gaming',
             role: 'Gamer Path User',
             avatar: '🎮',
-            comment: 'Perfect pentru mine! Interfața gaming și achievements-urile mă motivează să explorez mai multe destinații. Cel mai tare sistem de gamificare!',
+            comment: t('testimonials.users.gamer.comment'),
             rating: 5,
             gradient: 'from-purple-500 to-blue-500',
             hoverGradient: 'hover:from-purple-600 hover:to-blue-600',
-            location: 'București, România',
+            location: t('testimonials.users.gamer.location'),
             trips: 12
         },
         {
             name: 'Maria Explorer',
             role: 'Explorer Advanced',
             avatar: '🧭',
-            comment: 'Instrumentele avansate de planificare sunt incredibile. Am descoperit locuri pe care nu le-aș fi găsit niciodată. Aplicația perfectă pentru aventurieri!',
+            comment: t('testimonials.users.explorerAdvanced.comment'),
             rating: 5,
             gradient: 'from-green-500 to-teal-500',
             hoverGradient: 'hover:from-green-600 hover:to-teal-600',
-            location: 'Cluj-Napoca, România',
+            location: t('testimonials.users.explorerAdvanced.location'),
             trips: 18
         },
         {
             name: 'Ana Începător',
             role: 'Explorer Beginner',
             avatar: '🌟',
-            comment: 'Ca începător în călătorii, aplicația m-a ghidat perfect. Acum îmi planific singură toate vacanțele! Foarte ușor de folosit.',
+            comment: t('testimonials.users.explorerBeginner.comment'),
             rating: 5,
             gradient: 'from-blue-500 to-indigo-500',
             hoverGradient: 'hover:from-blue-600 hover:to-indigo-600',
-            location: 'Timișoara, România',
+            location: t('testimonials.users.explorerBeginner.location'),
             trips: 6
         },
         {
             name: 'Gheorghe Senior',
             role: 'Senior-Friendly User',
             avatar: '👴',
-            comment: 'În sfârșit o aplicație pe care o pot folosi fără stres. Butoanele mari și suportul telefonic sunt excelente. Recomand cu drag!',
+            comment: t('testimonials.users.seniorFriendly.comment'),
             rating: 5,
             gradient: 'from-orange-500 to-red-500',
             hoverGradient: 'hover:from-orange-600 hover:to-red-600',
-            location: 'Iași, România',
+            location: t('testimonials.users.seniorFriendly.location'),
             trips: 8
         }
     ];
@@ -56,28 +59,28 @@ export const TestimonialsSection = ({ onGetStarted }: TestimonialsSectionProps) 
         {
             icon: <Star className="w-8 h-8 text-yellow-500" />,
             value: '4.9/5',
-            label: 'Rating Mediu',
+            label: t('testimonials.stats.avgRating'),
             color: 'text-yellow-600',
             bgColor: 'bg-yellow-50'
         },
         {
             icon: <TrendingUp className="w-8 h-8 text-green-500" />,
             value: '98%',
-            label: 'Satisfacție Client',
+            label: t('testimonials.stats.satisfaction'),
             color: 'text-green-600',
             bgColor: 'bg-green-50'
         },
         {
             icon: <MapPin className="w-8 h-8 text-purple-500" />,
             value: '10K+',
-            label: 'Călătorii Planificate',
+            label: t('testimonials.stats.plannedTrips'),
             color: 'text-purple-600',
             bgColor: 'bg-purple-50'
         },
         {
             icon: <Users className="w-8 h-8 text-blue-500" />,
             value: '50+',
-            label: 'Țări Disponibile',
+            label: t('testimonials.stats.countries'),
             color: 'text-blue-600',
             bgColor: 'bg-blue-50'
         }
@@ -95,17 +98,16 @@ export const TestimonialsSection = ({ onGetStarted }: TestimonialsSectionProps) 
             <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-20">
                     <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 rounded-full text-sm font-medium mb-6">
-                        ⭐ Testimoniale
+                        {t('testimonials.badge')}
                     </div>
                     <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-                        Ce spun
+                        {t('testimonials.title')}
                         <span className="block text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-blue-600 to-teal-600">
-                            utilizatorii noștri
+                            {t('testimonials.titleHighlight')}
                         </span>
                     </h2>
                     <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                        Fiecare cale de utilizare are comunitatea sa de utilizatori mulțumiți care au descoperit 
-                        experiențe de călătorie unice și personalizate.
+                        {t('testimonials.subtitle')}
                     </p>
                 </div>
 
@@ -139,7 +141,10 @@ export const TestimonialsSection = ({ onGetStarted }: TestimonialsSectionProps) 
                                         ))}
                                     </div>
                                     <div className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-                                        {testimonial.trips} călătorii
+                                        {index === 0 && t('testimonials.users.gamer.trips', { count: testimonial.trips })}
+                                        {index === 1 && t('testimonials.users.explorerAdvanced.trips', { count: testimonial.trips })}
+                                        {index === 2 && t('testimonials.users.explorerBeginner.trips', { count: testimonial.trips })}
+                                        {index === 3 && t('testimonials.users.seniorFriendly.trips', { count: testimonial.trips })}
                                     </div>
                                 </div>
 
@@ -168,8 +173,8 @@ export const TestimonialsSection = ({ onGetStarted }: TestimonialsSectionProps) 
                     
                     <div className="relative z-10">
                         <div className="text-center mb-12">
-                            <h3 className="text-3xl font-bold text-gray-900 mb-4">Statistici Impresionante</h3>
-                            <p className="text-gray-600 text-lg">Numerele care demonstrează calitatea serviciilor noastre</p>
+                            <h3 className="text-3xl font-bold text-gray-900 mb-4">{t('testimonials.statsTitle')}</h3>
+                            <p className="text-gray-600 text-lg">{t('testimonials.statsSubtitle')}</p>
                         </div>
                         
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -190,12 +195,12 @@ export const TestimonialsSection = ({ onGetStarted }: TestimonialsSectionProps) 
 
                 {/* Call to action */}
                 <div className="text-center mt-16">
-                    <p className="text-lg text-gray-600 mb-6">Vrei să fii următorul nostru utilizator mulțumit?</p>
+                    <p className="text-lg text-gray-600 mb-6">{t('testimonials.ctaMessage')}</p>
                     <button 
                         onClick={onGetStarted}
                         className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold px-8 py-4 rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
                     >
-                        💫 Începe Călătoria Ta
+                        {t('testimonials.ctaButton')}
                     </button>
                 </div>
             </div>

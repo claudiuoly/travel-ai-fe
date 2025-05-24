@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Send, Mic, MicOff, Globe } from 'lucide-react';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface Message {
     id: string;
@@ -21,18 +22,19 @@ const LANGUAGES = [
 ];
 
 export const ChatBot = () => {
+    const { t, currentLanguage } = useTranslation();
     const [messages, setMessages] = useState<Message[]>([
         {
             id: '1',
-            text: 'Bună ziua! Sunt asistentul dumneavoastră virtual. Cu ce vă pot ajuta astăzi?',
+            text: t('chat.welcomeMessage'),
             isUser: false,
             timestamp: new Date(),
-            language: 'ro'
+            language: currentLanguage
         }
     ]);
     const [inputText, setInputText] = useState('');
     const [isListening, setIsListening] = useState(false);
-    const [selectedLanguage, setSelectedLanguage] = useState('ro');
+    const [selectedLanguage, setSelectedLanguage] = useState(currentLanguage);
     const [showLanguageSelector, setShowLanguageSelector] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -43,58 +45,17 @@ export const ChatBot = () => {
     useEffect(scrollToBottom, [messages]);
 
     const getResponseForLanguage = (userMessage: string, language: string) => {
-        const responses = {
-            ro: {
-                greeting: 'Bună! Cu ce vă pot ajuta?',
-                travel: 'Pentru călătorii, vă pot ajuta să găsiți destinații frumoase și sigure.',
-                help: 'Sunt aici să vă ajut cu orice întrebări despre călătorii.',
-                default: 'Înțeleg. Vă pot ajuta cu planificarea călătoriilor sau răspund la întrebări despre destinații.'
-            },
-            en: {
-                greeting: 'Hello! How can I help you?',
-                travel: 'For travel, I can help you find beautiful and safe destinations.',
-                help: 'I\'m here to help with any travel questions you have.',
-                default: 'I understand. I can help with trip planning or answer questions about destinations.'
-            },
-            de: {
-                greeting: 'Hallo! Wie kann ich Ihnen helfen?',
-                travel: 'Für Reisen kann ich Ihnen helfen, schöne und sichere Ziele zu finden.',
-                help: 'Ich bin hier, um bei allen Reisefragen zu helfen.',
-                default: 'Ich verstehe. Ich kann bei der Reiseplanung helfen oder Fragen zu Zielen beantworten.'
-            },
-            fr: {
-                greeting: 'Bonjour! Comment puis-je vous aider?',
-                travel: 'Pour les voyages, je peux vous aider à trouver de belles destinations sûres.',
-                help: 'Je suis là pour vous aider avec toutes vos questions de voyage.',
-                default: 'Je comprends. Je peux vous aider avec la planification de voyage ou répondre aux questions sur les destinations.'
-            },
-            es: {
-                greeting: '¡Hola! ¿Cómo puedo ayudarle?',
-                travel: 'Para viajes, puedo ayudarle a encontrar destinos hermosos y seguros.',
-                help: 'Estoy aquí para ayudar con cualquier pregunta sobre viajes.',
-                default: 'Entiendo. Puedo ayudar con la planificación de viajes o responder preguntas sobre destinos.'
-            },
-            it: {
-                greeting: 'Ciao! Come posso aiutarla?',
-                travel: 'Per i viaggi, posso aiutarla a trovare destinazioni belle e sicure.',
-                help: 'Sono qui per aiutare con qualsiasi domanda sui viaggi.',
-                default: 'Capisco. Posso aiutare con la pianificazione del viaggio o rispondere a domande sulle destinazioni.'
-            }
-        };
-
-        const langResponses = responses[language as keyof typeof responses] || responses.ro;
-
         if (userMessage.toLowerCase().includes('salut') || userMessage.toLowerCase().includes('hello') || userMessage.toLowerCase().includes('hola')) {
-            return langResponses.greeting;
+            return t('chat.responses.greeting');
         }
         if (userMessage.toLowerCase().includes('calatorie') || userMessage.toLowerCase().includes('travel') || userMessage.toLowerCase().includes('viaje')) {
-            return langResponses.travel;
+            return t('chat.responses.travel');
         }
         if (userMessage.toLowerCase().includes('ajutor') || userMessage.toLowerCase().includes('help') || userMessage.toLowerCase().includes('ayuda')) {
-            return langResponses.help;
+            return t('chat.responses.help');
         }
 
-        return langResponses.default;
+        return t('chat.responses.default');
     };
 
     const sendMessage = () => {
@@ -138,18 +99,9 @@ export const ChatBot = () => {
         setSelectedLanguage(langCode);
         setShowLanguageSelector(false);
 
-        const welcomeMessages = {
-            ro: 'Limba a fost schimbată în română. Cu ce vă pot ajuta?',
-            en: 'Language changed to English. How can I help you?',
-            de: 'Sprache auf Deutsch geändert. Wie kann ich Ihnen helfen?',
-            fr: 'Langue changée en français. Comment puis-je vous aider?',
-            es: 'Idioma cambiado a español. ¿Cómo puedo ayudarle?',
-            it: 'Lingua cambiata in italiano. Come posso aiutarla?'
-        };
-
         const botMessage: Message = {
             id: Date.now().toString(),
-            text: welcomeMessages[langCode as keyof typeof welcomeMessages] || welcomeMessages.ro,
+            text: t(`chat.languageChanged.${langCode}`),
             isUser: false,
             timestamp: new Date(),
             language: langCode
@@ -158,7 +110,7 @@ export const ChatBot = () => {
         setMessages(prev => [...prev, botMessage]);
     };
 
-    const currentLanguage = LANGUAGES.find(lang => lang.code === selectedLanguage);
+    const currentLang = LANGUAGES.find(lang => lang.code === selectedLanguage);
 
     return (
         <div className="flex flex-col h-full bg-gray-50">
@@ -169,8 +121,8 @@ export const ChatBot = () => {
                         🤖
                     </div>
                     <div>
-                        <h3 className="font-semibold text-lg">Asistent Virtual</h3>
-                        <p className="text-sm text-gray-600">Online</p>
+                        <h3 className="font-semibold text-lg">{t('chat.title')}</h3>
+                        <p className="text-sm text-gray-600">{t('chat.status')}</p>
                     </div>
                 </div>
 
@@ -181,8 +133,8 @@ export const ChatBot = () => {
                         className="flex items-center space-x-2"
                     >
                         <Globe className="w-4 h-4" />
-                        <span>{currentLanguage?.flag}</span>
-                        <span>{currentLanguage?.name}</span>
+                        <span>{currentLang?.flag}</span>
+                        <span>{currentLang?.name}</span>
                     </Button>
 
                     {showLanguageSelector && (
@@ -231,7 +183,7 @@ export const ChatBot = () => {
                             value={inputText}
                             onChange={(e) => setInputText(e.target.value)}
                             onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-                            placeholder="Scrieți mesajul dumneavoastră..."
+                            placeholder={t('chat.placeholder')}
                             className="w-full px-4 py-3 text-lg border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>

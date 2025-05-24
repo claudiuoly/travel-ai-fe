@@ -1,42 +1,65 @@
 import { Gamepad2, Compass, Star, Heart } from 'lucide-react';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export const FeaturesSection = () => {
+    const { t } = useTranslation();
+    
     const features = [
         {
             icon: <Gamepad2 className="w-12 h-12 text-white" />,
             emoji: '🎮',
-            title: 'Gamer Path',
-            description: 'Interfață dark theme cu elemente gaming, provocări, achievements și leaderboards pentru o experiență gamificată.',
+            title: t('features.paths.gamer.title'),
+            description: t('features.paths.gamer.description'),
             gradient: 'from-purple-600 to-blue-600',
             hoverGradient: 'hover:from-purple-700 hover:to-blue-700',
-            features: ['Dark Theme', 'Achievements', 'Leaderboards', 'Provocări Gaming']
+            features: [
+                t('features.paths.gamer.features.darkTheme'),
+                t('features.paths.gamer.features.achievements'), 
+                t('features.paths.gamer.features.leaderboards'), 
+                t('features.paths.gamer.features.challenges')
+            ]
         },
         {
             icon: <Compass className="w-12 h-12 text-white" />,
             emoji: '🧭',
-            title: 'Explorer Advanced',
-            description: 'Instrumente avansate de planificare, filtre multiple și destinații off-the-beaten-path pentru aventurieri experimentați.',
+            title: t('features.paths.explorerAdvanced.title'),
+            description: t('features.paths.explorerAdvanced.description'),
             gradient: 'from-green-600 to-teal-600',
             hoverGradient: 'hover:from-green-700 hover:to-teal-700',
-            features: ['Filtre Avansate', 'Planificare Detaliată', 'Destinații Rare', 'Hărți Interactive']
+            features: [
+                t('features.paths.explorerAdvanced.features.advancedFilters'),
+                t('features.paths.explorerAdvanced.features.detailedPlanning'), 
+                t('features.paths.explorerAdvanced.features.rareDestinations'), 
+                t('features.paths.explorerAdvanced.features.interactiveMaps')
+            ]
         },
         {
             icon: <Star className="w-12 h-12 text-white" />,
             emoji: '🌟',
-            title: 'Explorer Beginner',
-            description: 'Interfață curată cu ghidare pas cu pas și destinații populare și sigure pentru începători în călătorii.',
+            title: t('features.paths.explorerBeginner.title'),
+            description: t('features.paths.explorerBeginner.description'),
             gradient: 'from-blue-600 to-indigo-600',
             hoverGradient: 'hover:from-blue-700 hover:to-indigo-700',
-            features: ['Ghidare Pas cu Pas', 'Destinații Sigure', 'Suport 24/7', 'Recomandări Personalizate']
+            features: [
+                t('features.paths.explorerBeginner.features.stepByStep'),
+                t('features.paths.explorerBeginner.features.safeDestinations'), 
+                t('features.paths.explorerBeginner.features.support24'), 
+                t('features.paths.explorerBeginner.features.personalizedRecommendations')
+            ]
         },
         {
             icon: <Heart className="w-12 h-12 text-white" />,
             emoji: '👴',
-            title: 'Senior-Friendly',
-            description: 'Design simplificat cu fonturi mari, butoane mari și suport telefonic 24/7 pentru utilizatorii seniors.',
+            title: t('features.paths.seniorFriendly.title'),
+            description: t('features.paths.seniorFriendly.description'),
             gradient: 'from-orange-600 to-red-600',
             hoverGradient: 'hover:from-orange-700 hover:to-red-700',
-            features: ['Fonturi Mari', 'Butoane Mari', 'Suport Telefonic', 'Design Simplificat']
+            features: [
+                t('features.paths.seniorFriendly.features.largeFonts'),
+                t('features.paths.seniorFriendly.features.largeButtons'), 
+                t('features.paths.seniorFriendly.features.phoneSupport'), 
+                t('features.paths.seniorFriendly.features.simplifiedDesign')
+            ]
         }
     ];
 
@@ -52,17 +75,16 @@ export const FeaturesSection = () => {
             <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-20 animate-slideInUp">
                     <div className="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium mb-4 animate-slideInDown delay-300">
-                        ✨ Opțiuni Personalizate
+                        {t('features.badge')}
                     </div>
                     <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 animate-slideInUp delay-500">
-                        Căi Personalizate de
+                        {t('features.title')}
                         <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-                            Utilizare
+                            {t('features.titleHighlight')}
                         </span>
                     </h2>
                     <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed animate-slideInUp delay-700">
-                        Fiecare utilizator primește o experiență unică, adaptată perfect personalității și experienței sale.
-                        Alege calea care ți se potrivește cel mai bine.
+                        {t('features.subtitle')}
                     </p>
                 </div>
 
@@ -119,7 +141,7 @@ export const FeaturesSection = () => {
                 <div className="text-center mt-20 animate-slideInUp delay-1800">
                     <div className="inline-flex items-center space-x-2 text-gray-600">
                         <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
-                        <span className="text-sm font-medium">Și multe altele în curând...</span>
+                        <span className="text-sm font-medium">{t('features.comingSoon')}</span>
                         <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse delay-1000"></div>
                     </div>
                 </div>

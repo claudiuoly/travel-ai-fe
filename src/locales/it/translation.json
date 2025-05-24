@@ -1,0 +1,453 @@
+{
+  "common": {
+    "loading": "Caricamento...",
+    "error": "Errore",
+    "success": "Successo",
+    "yes": "Sì",
+    "no": "No",
+    "cancel": "Annulla",
+    "save": "Salva",
+    "edit": "Modifica",
+    "delete": "Elimina",
+    "add": "Aggiungi",
+    "search": "Cerca",
+    "clear": "Cancella",
+    "back": "Indietro",
+    "next": "Avanti",
+    "previous": "Precedente",
+    "continue": "Continua",
+    "close": "Chiudi"
+  },
+  "header": {
+    "appName": "Trajecta",
+    "subtitle": "Viaggi Personalizzati",
+    "login": "Accedi",
+    "register": "Registrati",
+    "logout": "Esci",
+    "profile": "Profilo",
+    "settings": "Impostazioni",
+    "about": "Chi siamo",
+    "features": "Caratteristiche",
+    "testimonials": "Testimonianze",
+    "greeting": "Ciao, {{name}}! 👋"
+  },
+  "hero": {
+    "badge": "App #1 per viaggi personalizzati",
+    "title": "Scopri il mondo con",
+    "titleHighlight": "Trajecta",
+    "subtitle": "Un'app di viaggi personalizzata che si adatta al tuo stile di vita. Dai gamer agli esploratori e senior - ognuno ha la sua avventura.",
+    "stats": {
+      "users": "{{count}}+ utenti",
+      "destinations": "{{count}}+ destinazioni",
+      "rating": "{{rating}}/5 valutazione"
+    },
+    "cta": "🚀 Inizia l'Avventura"
+  },
+  "about": {
+    "badge": "💡 Su Trajecta",
+    "title": "Perché scegliere",
+    "titleHighlight": "Trajecta?",
+    "subtitle": "La prima app di viaggi che si adatta alla tua personalità ed esperienza. Niente più ricerche tra centinaia di opzioni - ottieni esattamente quello che ti serve per l'avventura perfetta.",
+    "features": {
+      "ai": {
+        "title": "Intelligenza Artificiale",
+        "description": "Il nostro algoritmo analizza le tue preferenze e raccomanda l'esperienza di viaggio più adatta."
+      },
+      "personalization": {
+        "title": "Personalizzazione Completa",
+        "description": "4 percorsi distinti: Gamer, Explorer Advanced, Explorer Beginner e Senior-Friendly."
+      },
+      "destinations": {
+        "title": "Destinazioni Uniche",
+        "description": "Dalle perle nascoste per esploratori alle destinazioni popolari per principianti."
+      },
+      "planning": {
+        "title": "Pianificazione Rapida",
+        "description": "Pianifica viaggi in pochi minuti con la nostra IA avanzata e raccomandazioni personalizzate."
+      },
+      "safety": {
+        "title": "Viaggi Sicuri",
+        "description": "Verifichiamo tutte le destinazioni e i partner per la tua sicurezza e comodità."
+      },
+      "premium": {
+        "title": "Esperienze Premium",
+        "description": "Accesso esclusivo a esperienze di viaggio premium e offerte speciali."
+      }
+    },
+    "cta": {
+      "title": "Pronto a iniziare la tua avventura?",
+      "subtitle": "Unisciti alla comunità di oltre 10.000 viaggiatori che hanno già scoperto il mondo con Trajecta.",
+      "startNow": "🚀 Inizia Ora",
+      "downloadApp": "📱 Scarica l'App"
+    },
+    "appPopup": {
+      "title": "App Mobile Trajecta",
+      "message": "App mobile in arrivo! 🚀",
+      "submessage": "Resta sintonizzato per gli aggiornamenti.",
+      "progress": "In sviluppo: 75%",
+      "waitButton": "✨ Perfetto, aspetterò!",
+      "webButton": "🌐 Prova la versione web"
+    }
+  },
+  "features": {
+    "badge": "✨ Opzioni Personalizzate",
+    "title": "Percorsi Personalizzati di",
+    "titleHighlight": "Utilizzo",
+    "subtitle": "Ogni utente riceve un'esperienza unica, perfettamente adattata alla sua personalità ed esperienza. Scegli il percorso che ti si addice meglio.",
+    "comingSoon": "E molti altri in arrivo...",
+    "paths": {
+      "gamer": {
+        "title": "Percorso Gamer",
+        "description": "Interfaccia tema scuro con elementi gaming, sfide, achievement e classifiche per un'esperienza gamificata.",
+        "features": {
+          "darkTheme": "Tema Scuro",
+          "achievements": "Achievement",
+          "leaderboards": "Classifiche",
+          "challenges": "Sfide Gaming"
+        }
+      },
+      "explorerAdvanced": {
+        "title": "Explorer Avanzato",
+        "description": "Strumenti di pianificazione avanzati, filtri multipli e destinazioni fuori dai sentieri battuti per avventurieri esperti.",
+        "features": {
+          "advancedFilters": "Filtri Avanzati",
+          "detailedPlanning": "Pianificazione Dettagliata",
+          "rareDestinations": "Destinazioni Rare",
+          "interactiveMaps": "Mappe Interattive"
+        }
+      },
+      "explorerBeginner": {
+        "title": "Explorer Principiante",
+        "description": "Interfaccia pulita con guida passo-passo e destinazioni popolari e sicure per principianti dei viaggi.",
+        "features": {
+          "stepByStep": "Guida Passo-Passo",
+          "safeDestinations": "Destinazioni Sicure",
+          "support24": "Supporto 24/7",
+          "personalizedRecommendations": "Raccomandazioni Personalizzate"
+        }
+      },
+      "seniorFriendly": {
+        "title": "Amichevole per Senior",
+        "description": "Design semplificato con font grandi, pulsanti grandi e supporto telefonico 24/7 per utenti senior.",
+        "features": {
+          "largeFonts": "Font Grandi",
+          "largeButtons": "Pulsanti Grandi",
+          "phoneSupport": "Supporto Telefonico",
+          "simplifiedDesign": "Design Semplificato"
+        }
+      }
+    }
+  },
+  "testimonials": {
+    "badge": "⭐ Testimonianze",
+    "title": "Cosa dicono i",
+    "titleHighlight": "nostri utenti",
+    "subtitle": "Ogni percorso di utilizzo ha la sua comunità di utenti soddisfatti che hanno scoperto esperienze di viaggio uniche e personalizzate.",
+    "stats": {
+      "avgRating": "Valutazione Media",
+      "satisfaction": "Soddisfazione Cliente",
+      "plannedTrips": "Viaggi Pianificati",
+      "countries": "Paesi Disponibili"
+    },
+    "statsTitle": "Statistiche Impressionanti",
+    "statsSubtitle": "Numeri che dimostrano la qualità dei nostri servizi",
+    "ctaMessage": "Vuoi essere il nostro prossimo utente soddisfatto?",
+    "ctaButton": "💫 Inizia il Tuo Viaggio",
+    "users": {
+      "gamer": {
+        "comment": "Perfetto per me! L'interfaccia gaming e gli achievement mi motivano a esplorare più destinazioni. Il sistema di gamificazione più bello!",
+        "location": "Bucarest, Romania",
+        "trips": "{{count}} viaggi"
+      },
+      "explorerAdvanced": {
+        "comment": "Gli strumenti di pianificazione avanzati sono incredibili. Ho scoperto posti che non avrei mai trovato. L'app perfetta per avventurieri!",
+        "location": "Cluj-Napoca, Romania",
+        "trips": "{{count}} viaggi"
+      },
+      "explorerBeginner": {
+        "comment": "Come principiante nei viaggi, l'app mi ha guidato perfettamente. Ora pianifico tutte le mie vacanze da sola! Molto facile da usare.",
+        "location": "Timisoara, Romania",
+        "trips": "{{count}} viaggi"
+      },
+      "seniorFriendly": {
+        "comment": "Finalmente un'app che posso usare senza stress. I pulsanti grandi e il supporto telefonico sono eccellenti. Lo raccomando vivamente!",
+        "location": "Iasi, Romania",
+        "trips": "{{count}} viaggi"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Accedi",
+      "identifier": "Email / Telefono / Username",
+      "identifierPlaceholder": "Inserisci email, telefono o username",
+      "password": "Password",
+      "passwordPlaceholder": "Inserisci la password",
+      "rememberMe": "Ricordami",
+      "forgotPassword": "Password dimenticata?",
+      "loginButton": "Accedi",
+      "loginButtonLoading": "Accesso in corso...",
+      "noAccount": "Non hai un account?",
+      "registerLink": "Registrati",
+      "detected": "Rilevato come: {{type}}",
+      "types": {
+        "email": "email",
+        "telefon": "telefono",
+        "username": "username"
+      },
+      "success": {
+        "title": "Accesso riuscito!",
+        "description": "Bentornato!"
+      },
+      "errors": {
+        "invalidCredentials": {
+          "title": "Errore di accesso",
+          "description": "Email/telefono/username o password incorretti. Verifica i dati e riprova."
+        },
+        "serverError": {
+          "title": "Errore di accesso",
+          "description": "Impossibile connettersi al server. Verifica la connessione internet e riprova."
+        }
+      }
+    },
+    "register": {
+      "title": "Registrati",
+      "fullName": "Nome completo",
+      "fullNamePlaceholder": "Inserisci il nome completo",
+      "email": "Email",
+      "emailPlaceholder": "email@esempio.com",
+      "phone": "Telefono",
+      "phonePlaceholder": "+40123456789",
+      "username": "Username",
+      "usernamePlaceholder": "username_unico",
+      "age": "Età",
+      "agePlaceholder": "25",
+      "password": "Password",
+      "passwordPlaceholder": "Password sicura",
+      "confirmPassword": "Conferma password",
+      "confirmPasswordPlaceholder": "Conferma password",
+      "acceptTerms": "Accetto i",
+      "termsAndConditions": "termini e condizioni",
+      "and": "e",
+      "privacyPolicy": "politica sulla privacy",
+      "registerButton": "Crea account",
+      "registerButtonLoading": "Registrazione in corso...",
+      "hasAccount": "Hai già un account?",
+      "loginLink": "Accedi",
+      "passwordStrength": {
+        "label": "Forza password:",
+        "veryWeak": "Molto debole",
+        "weak": "Debole",
+        "medium": "Media",
+        "strong": "Forte",
+        "veryStrong": "Molto forte"
+      },
+      "validation": {
+        "fullNameRequired": "Il nome completo è obbligatorio",
+        "emailInvalid": "Email non valida",
+        "phoneInvalid": "Numero di telefono non valido",
+        "usernameMinLength": "L'username deve avere almeno 3 caratteri",
+        "passwordMinLength": "La password deve avere almeno 6 caratteri",
+        "passwordsNotMatch": "Le password non corrispondono",
+        "ageInvalid": "L'età deve essere tra 13 e 120 anni",
+        "termsRequired": "Devi accettare i termini e le condizioni"
+      },
+      "success": {
+        "title": "Registrazione riuscita!",
+        "description": "Il tuo account è stato creato con successo. Ora puoi accedere con le tue credenziali."
+      },
+      "errors": {
+        "invalidData": {
+          "title": "Errore di registrazione",
+          "description": "I dati inseriti non sono validi o l'utente esiste già. Verifica le informazioni e riprova."
+        },
+        "serverError": {
+          "title": "Errore di registrazione",
+          "description": "Impossibile connettersi al server. Verifica la connessione internet e riprova."
+        }
+      }
+    }
+  },
+  "quiz": {
+    "title": "Scopri il Tuo Percorso Perfetto",
+    "subtitle": "Rispondi ad alcune domande per trovare l'esperienza di viaggio ideale per te",
+    "progress": "Domanda {{current}} di {{total}}",
+    "progressPercent": "{{percent}}% completato",
+    "hint": "Scegli la risposta che ti descrive meglio",
+    "categories": {
+      "technology": "Tecnologia & Digitale",
+      "travel": "Esperienza di Viaggio",
+      "personality": "Personalità",
+      "gaming": "Gaming & Intrattenimento"
+    }
+  },
+  "pathRecommendation": {
+    "title": "🎉 Corrispondenza Perfetta!",
+    "subtitle": "Basandoci sulle tue risposte, abbiamo trovato il percorso perfetto per te",
+    "matchScore": "Punteggio di corrispondenza: {{score}}%",
+    "featuresTitle": "Cosa troverai in questo percorso:",
+    "preferencesTitle": "Analisi delle Tue Preferenze",
+    "preferencesLabels": {
+      "technology": "Tecnologia",
+      "travel": "Viaggi",
+      "personality": "Personalità",
+      "gaming": "Gaming"
+    },
+    "actions": {
+      "accept": "✨ Accetta Raccomandazione",
+      "tryAll": "🔄 Prova Tutti i Percorsi",
+      "chooseManually": "⚙️ Scegli Manualmente"
+    },
+    "note": "Non ti piace la scelta? Puoi cambiare percorso in qualsiasi momento dalle impostazioni!",
+    "paths": {
+      "gamer": {
+        "title": "Percorso Gamer 🎮",
+        "description": "Perfetto per utenti tech-savvy che amano le sfide e gli elementi gaming.",
+        "features": [
+          "Interfaccia tema scuro con elementi neon",
+          "Sistema XP, achievement e classifiche",
+          "Quest di viaggio e competizioni fotografiche",
+          "Badge e contenuti sbloccabili"
+        ]
+      },
+      "explorer-advanced": {
+        "title": "Percorso Explorer - Avanzato 🧭",
+        "description": "Per viaggiatori esperti che cercano avventure e destinazioni fuori dai sentieri battuti.",
+        "features": [
+          "Strumenti di pianificazione avanzati",
+          "Filtri multipli e ricerca complessa",
+          "Perle nascoste e destinazioni esotiche",
+          "Forum della comunità per condividere"
+        ]
+      },
+      "explorer-beginner": {
+        "title": "Percorso Explorer - Principiante 🌟",
+        "description": "Ideale per principianti nei viaggi che vogliono guida e destinazioni popolari.",
+        "features": [
+          "Interfaccia pulita e intuitiva",
+          "Tutorial passo-passo",
+          "Destinazioni popolari e sicure",
+          "Supporto 24/7 e guide dettagliate"
+        ]
+      },
+      "senior-friendly": {
+        "title": "Percorso Amichevole per Senior 👴👵",
+        "description": "Per utenti che preferiscono semplicità e accessibilità.",
+        "features": [
+          "Font grandi e alto contrasto",
+          "Navigazione semplice con pulsanti grandi",
+          "Comandi vocali e supporto telefonico",
+          "Viaggi tranquilli e accessibili"
+        ]
+      }
+    }
+  },
+  "profile": {
+    "title": "Il Mio Profilo",
+    "travelMemories": "I Miei Ricordi di Viaggio 🌍",
+    "addMemory": "Aggiungi Ricordo",
+    "addFirstMemory": "Aggiungi Primo Ricordo",
+    "newMemoryTitle": "Aggiungi un Nuovo Ricordo",
+    "country": "Paese",
+    "city": "Città",
+    "cityPlaceholder": "Inserisci il nome della città",
+    "travelDate": "Data del Viaggio",
+    "description": "Descrizione",
+    "descriptionPlaceholder": "Descrivi la tua esperienza...",
+    "photos": "Foto",
+    "saveMemory": "Salva Ricordo",
+    "noMemories": {
+      "title": "Non hai ancora aggiunto ricordi",
+      "subtitle": "Aggiungi il tuo primo ricordo di viaggio!"
+    },
+    "morePhotos": "+{{count}} altre foto",
+    "countrySelector": {
+      "placeholder": "Seleziona il paese",
+      "search": "Cerca il paese..."
+    },
+    "photoUpload": {
+      "dragText": "Trascina le foto qui o clicca per caricare",
+      "chooseFiles": "Scegli File",
+      "supportedFormats": "Accettiamo file JPG, PNG, GIF fino a 5MB ciascuno"
+    },
+    "pathTitles": {
+      "gamer": "Il Mio Profilo Gaming",
+      "explorer-advanced": "Profilo dell'Esploratore",
+      "explorer-beginner": "Profilo del Principiante",
+      "senior-friendly": "Il Mio Profilo"
+    },
+    "pathSubtitles": {
+      "gamer": "Mostra i tuoi viaggi e avventure",
+      "explorer-advanced": "Documenta le tue spedizioni e scoperte",
+      "explorer-beginner": "Inizia a costruire la tua collezione di ricordi",
+      "senior-friendly": "Conserva i bei ricordi dei viaggi"
+    }
+  },
+  "chat": {
+    "title": "Assistente Virtuale",
+    "status": "Online",
+    "placeholder": "Scrivi il tuo messaggio...",
+    "welcomeMessage": "Ciao! Sono il tuo assistente virtuale. Come posso aiutarti oggi?",
+    "languageChanged": {
+      "ro": "Limba a fost schimbată în română. Cu ce vă pot ajuta?",
+      "en": "Language changed to English. How can I help you?",
+      "de": "Sprache auf Deutsch geändert. Wie kann ich Ihnen helfen?",
+      "fr": "Langue changée en français. Comment puis-je vous aider?",
+      "es": "Idioma cambiado a español. ¿Cómo puedo ayudarle?",
+      "it": "Lingua cambiata in italiano. Come posso aiutarla?"
+    },
+    "responses": {
+      "greeting": "Ciao! Come posso aiutarti?",
+      "travel": "Per i viaggi, posso aiutarti a trovare destinazioni belle e sicure.",
+      "help": "Sono qui per aiutarti con qualsiasi domanda sui viaggi.",
+      "default": "Capisco. Posso aiutarti con la pianificazione dei viaggi o rispondere a domande sulle destinazioni."
+    }
+  },
+  "dashboard": {
+    "welcome": "Benvenuto in {{pathName}}!",
+    "comingSoon": "Funzionalità in arrivo...",
+    "placeholder": "Il contenuto per {{pathType}} sarà disponibile presto."
+  },
+  "notFound": {
+    "title": "Oops! Pagina non trovata",
+    "goHome": "Torna alla home"
+  },
+  "languages": {
+    "ro": "Română",
+    "en": "English",
+    "de": "Deutsch",
+    "fr": "Français",
+    "es": "Español",
+    "it": "Italiano"
+  },
+  "countries": {
+    "romania": "Romania",
+    "italy": "Italia",
+    "france": "Francia",
+    "spain": "Spagna",
+    "germany": "Germania",
+    "austria": "Austria",
+    "hungary": "Ungheria",
+    "bulgaria": "Bulgaria",
+    "greece": "Grecia",
+    "turkey": "Turchia",
+    "croatia": "Croazia",
+    "serbia": "Serbia",
+    "moldova": "Repubblica di Moldova",
+    "ukraine": "Ucraina",
+    "poland": "Polonia",
+    "czechia": "Repubblica Ceca",
+    "slovakia": "Slovacchia",
+    "slovenia": "Slovenia",
+    "netherlands": "Paesi Bassi",
+    "belgium": "Belgio",
+    "switzerland": "Svizzera",
+    "portugal": "Portogallo",
+    "uk": "Regno Unito",
+    "ireland": "Irlanda",
+    "norway": "Norvegia",
+    "sweden": "Svezia",
+    "denmark": "Danimarca",
+    "finland": "Finlandia"
+  }
+} 

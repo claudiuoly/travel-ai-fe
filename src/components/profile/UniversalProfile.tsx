@@ -5,6 +5,7 @@ import { Camera, MapPin, Plus, Edit, Trash2, User } from 'lucide-react';
 import { CountrySelector } from './CountrySelector';
 import { PhotoUpload } from './PhotoUpload';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface TravelMemory {
     id: string;
@@ -21,6 +22,7 @@ interface UniversalProfileProps {
 
 export const UniversalProfile = ({ userType = 'explorer-beginner' }: UniversalProfileProps) => {
     const { user } = useAuth();
+    const { t } = useTranslation();
     const [travelMemories, setTravelMemories] = useState<TravelMemory[]>([]);
     const [showAddMemory, setShowAddMemory] = useState(false);
     const [newMemory, setNewMemory] = useState({
@@ -42,8 +44,8 @@ export const UniversalProfile = ({ userType = 'explorer-beginner' }: UniversalPr
                     buttonColor: 'bg-purple-600 hover:bg-purple-700',
                     accent: 'text-purple-600',
                     emoji: '🎮',
-                    title: 'Profilul Meu Gaming',
-                    subtitle: 'Arată-ți călătoriile și aventurile'
+                    title: t('profile.pathTitles.gamer'),
+                    subtitle: t('profile.pathSubtitles.gamer')
                 };
             case 'explorer-advanced':
                 return {
@@ -53,8 +55,8 @@ export const UniversalProfile = ({ userType = 'explorer-beginner' }: UniversalPr
                     buttonColor: 'bg-blue-600 hover:bg-blue-700',
                     accent: 'text-blue-600',
                     emoji: '🧭',
-                    title: 'Profilul Exploratorului',
-                    subtitle: 'Documentează-ți expedițiile și descoperirile'
+                    title: t('profile.pathTitles.explorer-advanced'),
+                    subtitle: t('profile.pathSubtitles.explorer-advanced')
                 };
             case 'explorer-beginner':
                 return {
@@ -64,8 +66,8 @@ export const UniversalProfile = ({ userType = 'explorer-beginner' }: UniversalPr
                     buttonColor: 'bg-green-600 hover:bg-green-700',
                     accent: 'text-green-600',
                     emoji: '🌱',
-                    title: 'Profilul Începătorului',
-                    subtitle: 'Începe să-ți construiești colecția de amintiri'
+                    title: t('profile.pathTitles.explorer-beginner'),
+                    subtitle: t('profile.pathSubtitles.explorer-beginner')
                 };
             case 'senior-friendly':
                 return {
@@ -75,8 +77,8 @@ export const UniversalProfile = ({ userType = 'explorer-beginner' }: UniversalPr
                     buttonColor: 'bg-green-600 hover:bg-green-700',
                     accent: 'text-green-600',
                     emoji: '👴',
-                    title: 'Profilul Meu',
-                    subtitle: 'Păstrați amintirile frumoase din călătorii'
+                    title: t('profile.pathTitles.senior-friendly'),
+                    subtitle: t('profile.pathSubtitles.senior-friendly')
                 };
             default:
                 return {
@@ -86,8 +88,8 @@ export const UniversalProfile = ({ userType = 'explorer-beginner' }: UniversalPr
                     buttonColor: 'bg-gray-600 hover:bg-gray-700',
                     accent: 'text-gray-600',
                     emoji: '👤',
-                    title: 'Profilul Meu',
-                    subtitle: 'Păstrează-ți amintirile de călătorie'
+                    title: t('profile.title'),
+                    subtitle: t('profile.pathSubtitles.senior-friendly')
                 };
         }
     };
@@ -127,7 +129,7 @@ export const UniversalProfile = ({ userType = 'explorer-beginner' }: UniversalPr
                     <p className={`${textSize} text-gray-600 px-2`}>{theme.subtitle}</p>
                     {user && (
                         <p className={`${textSize} ${theme.accent} font-medium px-2`}>
-                            Bună ziua, {user.fullName}! 👋
+                            {t('header.greeting', { name: user.fullName })}
                         </p>
                     )}
                 </CardHeader>
@@ -137,7 +139,7 @@ export const UniversalProfile = ({ userType = 'explorer-beginner' }: UniversalPr
             <div className="space-y-4 md:space-y-6">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <h2 className={`${isSenior ? 'text-xl md:text-2xl' : 'text-lg md:text-xl'} font-bold text-gray-800`}>
-                        Amintirile Mele de Călătorie 🌍
+                        {t('profile.travelMemories')}
                     </h2>
                     <Button
                         onClick={() => setShowAddMemory(true)}
@@ -145,7 +147,7 @@ export const UniversalProfile = ({ userType = 'explorer-beginner' }: UniversalPr
                         className={`${theme.buttonColor} ${isSenior ? 'text-lg px-6 py-3' : ''} w-full sm:w-auto`}
                     >
                         <Plus className="w-5 h-5 mr-2" />
-                        Adaugă Amintire
+                        {t('profile.addMemory')}
                     </Button>
                 </div>
 
@@ -153,31 +155,31 @@ export const UniversalProfile = ({ userType = 'explorer-beginner' }: UniversalPr
                 {showAddMemory && (
                     <Card className={`border-2 border-dashed ${theme.border.replace('border-', 'border-').replace('-200', '-300')}`}>
                         <CardHeader>
-                            <CardTitle className={isSenior ? 'text-lg md:text-xl' : 'text-base md:text-lg'}>Adaugă o Amintire Nouă</CardTitle>
+                            <CardTitle className={isSenior ? 'text-lg md:text-xl' : 'text-base md:text-lg'}>{t('profile.newMemoryTitle')}</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label className={`block ${textSize} font-medium mb-2`}>Țara</label>
+                                    <label className={`block ${textSize} font-medium mb-2`}>{t('profile.country')}</label>
                                     <CountrySelector
                                         value={newMemory.country}
                                         onChange={(country) => setNewMemory({...newMemory, country})}
                                     />
                                 </div>
                                 <div>
-                                    <label className={`block ${textSize} font-medium mb-2`}>Orașul</label>
+                                    <label className={`block ${textSize} font-medium mb-2`}>{t('profile.city')}</label>
                                     <input
                                         type="text"
                                         value={newMemory.city}
                                         onChange={(e) => setNewMemory({...newMemory, city: e.target.value})}
                                         className={`w-full px-4 py-3 ${textSize} border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 touch-manipulation`}
-                                        placeholder="Introduceți numele orașului"
+                                        placeholder={t('profile.cityPlaceholder')}
                                     />
                                 </div>
                             </div>
 
                             <div>
-                                <label className={`block ${textSize} font-medium mb-2`}>Data Călătoriei</label>
+                                <label className={`block ${textSize} font-medium mb-2`}>{t('profile.travelDate')}</label>
                                 <input
                                     type="date"
                                     value={newMemory.date}
@@ -187,119 +189,133 @@ export const UniversalProfile = ({ userType = 'explorer-beginner' }: UniversalPr
                             </div>
 
                             <div>
-                                <label className={`block ${textSize} font-medium mb-2`}>Descriere</label>
+                                <label className={`block ${textSize} font-medium mb-2`}>{t('profile.description')}</label>
                                 <textarea
                                     value={newMemory.description}
                                     onChange={(e) => setNewMemory({...newMemory, description: e.target.value})}
                                     className={`w-full px-4 py-3 ${textSize} border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-24 md:h-32 resize-none touch-manipulation`}
-                                    placeholder="Descrieți experiența dumneavoastră..."
+                                    placeholder={t('profile.descriptionPlaceholder')}
                                 />
                             </div>
 
                             <div>
-                                <label className={`block ${textSize} font-medium mb-2`}>Fotografii</label>
+                                <label className={`block ${textSize} font-medium mb-2`}>{t('profile.photos')}</label>
                                 <PhotoUpload
                                     photos={newMemory.photos}
                                     onChange={(photos) => setNewMemory({...newMemory, photos})}
                                 />
                             </div>
 
-                            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+                            <div className="flex flex-col sm:flex-row gap-3 pt-4">
                                 <Button
                                     onClick={addTravelMemory}
                                     size={buttonSize}
-                                    className={`${theme.buttonColor} ${isSenior ? 'text-lg px-6' : ''} w-full sm:w-auto`}
+                                    className={`${theme.buttonColor} ${isSenior ? 'text-lg px-6 py-3' : ''} w-full sm:flex-1`}
                                 >
-                                    Salvează Amintirea
+                                    {t('profile.saveMemory')}
                                 </Button>
                                 <Button
                                     onClick={() => setShowAddMemory(false)}
                                     variant="outline"
                                     size={buttonSize}
-                                    className={`${isSenior ? 'text-lg px-6' : ''} w-full sm:w-auto`}
+                                    className={`${isSenior ? 'text-lg px-6 py-3' : ''} w-full sm:flex-1`}
                                 >
-                                    Anulează
+                                    {t('common.cancel')}
                                 </Button>
                             </div>
                         </CardContent>
                     </Card>
                 )}
 
-                {/* Memory Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                    {travelMemories.map((memory) => (
-                        <Card key={memory.id} className="hover:shadow-lg transition-shadow">
-                            <CardHeader className="pb-3">
-                                <div className="flex justify-between items-start">
-                                    <div className="flex-1 min-w-0">
-                                        <CardTitle className={`${isSenior ? 'text-lg md:text-xl' : 'text-base md:text-lg'} flex items-center`}>
-                                            <MapPin className={`w-4 h-4 md:w-5 md:h-5 mr-2 ${theme.accent} flex-shrink-0`} />
-                                            <span className="truncate">{memory.city}</span>
-                                        </CardTitle>
-                                        <p className="text-gray-600 truncate">{memory.country}</p>
-                                    </div>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() => deleteMemory(memory.id)}
-                                        className="text-red-600 hover:text-red-700 ml-2 flex-shrink-0 p-2"
-                                    >
-                                        <Trash2 className="w-4 h-4" />
-                                    </Button>
-                                </div>
-                            </CardHeader>
-                            <CardContent>
-                                {memory.photos.length > 0 && (
-                                    <div className="mb-4">
-                                        <img
-                                            src={memory.photos[0]}
-                                            alt={`${memory.city}, ${memory.country}`}
-                                            className="w-full h-40 md:h-48 object-cover rounded-lg"
-                                        />
-                                        {memory.photos.length > 1 && (
-                                            <p className="text-sm text-gray-500 mt-2">
-                                                +{memory.photos.length - 1} mai multe fotografii
-                                            </p>
-                                        )}
-                                    </div>
-                                )}
-
-                                {memory.description && (
-                                    <p className={`text-gray-700 mb-3 ${isSenior ? 'text-base' : 'text-sm'} line-clamp-3`}>
-                                        {memory.description}
-                                    </p>
-                                )}
-
-                                {memory.date && (
-                                    <p className="text-sm text-gray-500">
-                                        📅 {new Date(memory.date).toLocaleDateString('ro-RO')}
-                                    </p>
-                                )}
-                            </CardContent>
-                        </Card>
-                    ))}
-                </div>
-
-                {travelMemories.length === 0 && !showAddMemory && (
-                    <Card className="text-center py-8 md:py-12 border-2 border-dashed border-gray-300">
+                {/* Travel Memories List */}
+                {travelMemories.length === 0 ? (
+                    <Card className="text-center py-12">
                         <CardContent>
-                            <Camera className="w-12 h-12 md:w-16 md:h-16 mx-auto text-gray-400 mb-4" />
-                            <h3 className={`${isSenior ? 'text-lg md:text-xl' : 'text-base md:text-lg'} font-semibold text-gray-600 mb-2`}>
-                                Încă nu aveți amintiri adăugate
+                            <Camera className="w-16 h-16 md:w-20 md:h-20 text-gray-400 mx-auto mb-4" />
+                            <h3 className={`${isSenior ? 'text-lg md:text-xl' : 'text-base md:text-lg'} font-medium text-gray-600 mb-2`}>
+                                {t('profile.noMemories.title')}
                             </h3>
-                            <p className={`text-gray-500 mb-6 ${textSize} px-4`}>
-                                Adăugați prima dumneavoastră amintire de călătorie!
+                            <p className={`${textSize} text-gray-500 mb-6`}>
+                                {t('profile.noMemories.subtitle')}
                             </p>
                             <Button
                                 onClick={() => setShowAddMemory(true)}
                                 size={buttonSize}
-                                className={`${theme.buttonColor} w-full sm:w-auto`}
+                                className={`${theme.buttonColor} ${isSenior ? 'text-lg px-6 py-3' : ''}`}
                             >
                                 <Plus className="w-5 h-5 mr-2" />
-                                Adaugă Prima Amintire
+                                {t('profile.addFirstMemory')}
                             </Button>
                         </CardContent>
                     </Card>
+                ) : (
+                    <div className="grid gap-4 md:gap-6">
+                        {travelMemories.map((memory) => (
+                            <Card key={memory.id} className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                                <CardContent className="p-4 md:p-6">
+                                    <div className="flex flex-col lg:flex-row gap-4">
+                                        {/* Photos */}
+                                        {memory.photos.length > 0 && (
+                                            <div className="lg:w-1/3">
+                                                <div className="relative">
+                                                    <img
+                                                        src={memory.photos[0]}
+                                                        alt={`${memory.city}, ${memory.country}`}
+                                                        className="w-full h-48 md:h-64 lg:h-48 object-cover rounded-lg"
+                                                    />
+                                                    {memory.photos.length > 1 && (
+                                                        <div className="absolute bottom-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-sm">
+                                                            {t('profile.morePhotos', { count: memory.photos.length - 1 })}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Content */}
+                                        <div className="flex-1">
+                                            <div className="flex flex-col sm:flex-row justify-between items-start gap-2 mb-3">
+                                                <div>
+                                                    <h3 className={`${isSenior ? 'text-lg md:text-xl' : 'text-base md:text-lg'} font-bold text-gray-800 flex items-center gap-2`}>
+                                                        <MapPin className="w-4 h-4 md:w-5 md:h-5 text-blue-500" />
+                                                        {memory.city}, {memory.country}
+                                                    </h3>
+                                                    {memory.date && (
+                                                        <p className={`${textSize} text-gray-500`}>
+                                                            {new Date(memory.date).toLocaleDateString()}
+                                                        </p>
+                                                    )}
+                                                </div>
+                                                <div className="flex gap-2">
+                                                    <Button
+                                                        size="sm"
+                                                        variant="outline"
+                                                        className={isSenior ? 'px-3 py-2' : ''}
+                                                    >
+                                                        <Edit className="w-4 h-4" />
+                                                    </Button>
+                                                    <Button
+                                                        size="sm"
+                                                        variant="outline"
+                                                        onClick={() => deleteMemory(memory.id)}
+                                                        className={`text-red-600 hover:text-red-700 ${isSenior ? 'px-3 py-2' : ''}`}
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </Button>
+                                                </div>
+                                            </div>
+
+                                            {memory.description && (
+                                                <p className={`${textSize} text-gray-600 leading-relaxed`}>
+                                                    {memory.description}
+                                                </p>
+                                            )}
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </div>
                 )}
             </div>
         </div>

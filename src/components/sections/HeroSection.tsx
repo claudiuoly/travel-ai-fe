@@ -1,11 +1,14 @@
 import { Button } from '@/components/ui/button';
 import { Play, Star, Users, MapPin } from 'lucide-react';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface HeroSectionProps {
     onGetStarted: () => void;
 }
 
 export const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
+    const { t } = useTranslation();
+
     return (
         <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-purple-800 text-white overflow-hidden min-h-screen flex items-center">
             {/* Animated Background Pattern */}
@@ -28,34 +31,33 @@ export const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
                         {/* Badge */}
                         <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 animate-slideInLeft delay-300">
                             <Star className="w-4 h-4 text-yellow-400 mr-2" />
-                            <span className="text-sm font-medium">Aplicația #1 pentru călătorii personalizate</span>
+                            <span className="text-sm font-medium">{t('hero.badge')}</span>
                         </div>
 
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight animate-slideInLeft delay-500">
-                            Descoperă lumea cu
+                            {t('hero.title')}
                             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 animate-pulse">
-                                Trajecta
+                                {t('hero.titleHighlight')}
                             </span>
                         </h1>
 
                         <p className="text-xl md:text-2xl text-blue-100 leading-relaxed max-w-2xl animate-slideInLeft delay-700">
-                            O aplicație de călătorii personalizată care se adaptează stilului tău de viață.
-                            De la gameri la exploratori și seniori - fiecare are partea sa de aventură.
+                            {t('hero.subtitle')}
                         </p>
 
                         {/* Stats */}
                         <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start animate-slideInLeft delay-900">
                             <div className="flex items-center space-x-2 transform hover:scale-105 transition-transform duration-300">
                                 <Users className="w-5 h-5 text-green-400" />
-                                <span className="text-sm font-medium">10,000+ utilizatori</span>
+                                <span className="text-sm font-medium">{t('hero.stats.users', { count: 10000 })}</span>
                             </div>
                             <div className="flex items-center space-x-2 transform hover:scale-105 transition-transform duration-300">
                                 <MapPin className="w-5 h-5 text-yellow-400" />
-                                <span className="text-sm font-medium">500+ destinații</span>
+                                <span className="text-sm font-medium">{t('hero.stats.destinations', { count: 500 })}</span>
                             </div>
                             <div className="flex items-center space-x-2 transform hover:scale-105 transition-transform duration-300">
                                 <Star className="w-5 h-5 text-orange-400" />
-                                <span className="text-sm font-medium">4.9/5 rating</span>
+                                <span className="text-sm font-medium">{t('hero.stats.rating', { rating: 4.9 })}</span>
                             </div>
                         </div>
 
@@ -65,7 +67,7 @@ export const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
                                 size="lg"
                                 className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold px-8 py-4 text-lg shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1"
                             >
-                                🚀 Începe Aventura
+                                {t('hero.cta')}
                             </Button>
                         </div>
                     </div>

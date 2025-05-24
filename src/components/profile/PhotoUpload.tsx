@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Camera, Upload, X } from 'lucide-react';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface PhotoUploadProps {
     photos: string[];
@@ -9,6 +10,7 @@ interface PhotoUploadProps {
 
 export const PhotoUpload = ({ photos, onChange }: PhotoUploadProps) => {
     const [isDragging, setIsDragging] = useState(false);
+    const { t } = useTranslation();
 
     const handleFileSelect = (files: FileList | null) => {
         if (!files) return;
@@ -81,13 +83,13 @@ export const PhotoUpload = ({ photos, onChange }: PhotoUploadProps) => {
             >
                 <Camera className="w-12 h-12 mx-auto text-gray-400 mb-4" />
                 <p className="text-lg text-gray-600 mb-4">
-                    Glisați fotografiile aici sau faceți clic pentru a încărca
+                    {t('profile.photoUpload.dragText')}
                 </p>
 
                 <div className="flex justify-center space-x-4">
                     <Button variant="outline" className="relative">
                         <Upload className="w-4 h-4 mr-2" />
-                        Alegeți Fișierele
+                        {t('profile.photoUpload.chooseFiles')}
                         <input
                             type="file"
                             multiple
@@ -99,7 +101,7 @@ export const PhotoUpload = ({ photos, onChange }: PhotoUploadProps) => {
                 </div>
 
                 <p className="text-sm text-gray-500 mt-2">
-                    Acceptăm fișiere JPG, PNG, GIF până la 5MB fiecare
+                    {t('profile.photoUpload.supportedFormats')}
                 </p>
             </div>
         </div>
