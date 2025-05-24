@@ -1,285 +1,474 @@
-import { useState, useEffect } from "react";
-import { Header } from "@/components/layout/Header";
-import { HeroSection } from "@/components/sections/HeroSection";
-import { FeaturesSection } from "@/components/sections/FeaturesSection";
-import { AboutSection } from "@/components/sections/AboutSection";
-import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
-import { LoginModal } from "@/components/auth/LoginModal";
-import { RegisterModal } from "@/components/auth/RegisterModal";
-import { ProfileQuiz } from "@/components/quiz/ProfileQuiz";
-import { PathRecommendation } from "@/components/quiz/PathRecommendation";
-import { UserPath } from "@/types/user";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
+
+import { useState } from 'react';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { ChevronDown, Star, MapPin, Calendar, Users, Award, Check, Globe } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { AuthDialog } from '@/components/AuthDialog';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { LanguageSelector } from '@/components/LanguageSelector';
 
 const Index = () => {
   const navigate = useNavigate();
-  const { user, updateUser } = useAuth();
-  const [showQuiz, setShowQuiz] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showRegisterModal, setShowRegisterModal] = useState(false);
-  const [quizCompleted, setQuizCompleted] = useState(false);
-  const [userPath, setUserPath] = useState<UserPath | null>(null);
-  const [showManualSelection, setShowManualSelection] = useState(false);
-  const [pathSelected, setPathSelected] = useState(false);
+  const { t } = useLanguage();
+  const [flippedCard, setFlippedCard] = useState<number | null>(null);
+  const [authDialog, setAuthDialog] = useState<'login' | 'register' | null>(null);
 
-  // Redirect logged in users to their dashboard
-  useEffect(() => {
-    if (user) {
-      if (user.userPath) {
-        // User has a path selected, go to dashboard
-        navigateToDashboard(user.userPath.type);
-      } else if (user.isFirstLogin) {
-        // First login - show quiz
-        setShowQuiz(true);
-      } else {
-        // Not first login - skip quiz, show manual selection or go to beginner dashboard
-        if (user.profileCompleted) {
-          setShowManualSelection(true);
-        } else {
-          // Default to beginner dashboard if no path selected and not first login
-          navigateToDashboard('explorer-beginner');
-        }
-      }
+  const pricingPlans = [
+    {
+      name: t('pricing.basic.name'),
+      price: t('pricing.basic.price'),
+      period: t('pricing.basic.period'),
+      tagline: t('pricing.basic.tagline'),
+      features: [
+        t('features.basic.1'),
+        t('features.basic.2'),
+        t('features.basic.3'),
+        t('features.basic.4'),
+        t('features.basic.5')
+      ],
+      detailedFeatures: [
+        t('features.basic.1'),
+        t('features.basic.2'),
+        t('features.basic.3'),
+        t('features.basic.4'),
+        t('features.basic.5')
+      ]
+    },
+    {
+      name: t('pricing.premium.name'),
+      price: t('pricing.premium.price'),
+      period: t('pricing.premium.period'),
+      tagline: t('pricing.premium.tagline'),
+      popular: true,
+      features: [
+        t('features.premium.1'),
+        t('features.premium.2'),
+        t('features.premium.3'),
+        t('features.premium.4'),
+        t('features.premium.5')
+      ],
+      detailedFeatures: [
+        t('features.premium.1'),
+        t('features.premium.2'),
+        t('features.premium.3'),
+        t('features.premium.4'),
+        t('features.premium.5')
+      ]
+    },
+    {
+      name: t('pricing.enterprise.name'),
+      price: t('pricing.enterprise.price'),
+      period: t('pricing.enterprise.period'),
+      tagline: t('pricing.enterprise.tagline'),
+      features: [
+        t('features.enterprise.1'),
+        t('features.enterprise.2'),
+        t('features.enterprise.3'),
+        t('features.enterprise.4'),
+        t('features.enterprise.5')
+      ],
+      detailedFeatures: [
+        t('features.enterprise.1'),
+        t('features.enterprise.2'),
+        t('features.enterprise.3'),
+        t('features.enterprise.4'),
+        t('features.enterprise.5')
+      ]
     }
-  }, [user]);
+  ];
 
-  const handleGetStarted = () => {
-    if (user) {
-      // User is logged in
-      if (user.isFirstLogin) {
-        // First login - show quiz
-        setShowQuiz(true);
-      } else if (user.userPath) {
-        // Has path - go to dashboard
-        navigateToDashboard(user.userPath.type);
-      } else {
-        // Not first login and no path - show manual selection
-        setShowManualSelection(true);
-      }
-    } else {
-      // User not logged in, show register modal
-      setShowRegisterModal(true);
+  const benefits = [
+    {
+      icon: <MapPin className="w-8 h-8 text-blue-400" />,
+      title: t('benefits.agent.title'),
+      description: t('benefits.agent.desc')
+    },
+    {
+      icon: <Calendar className="w-8 h-8 text-purple-400" />,
+      title: t('benefits.planning.title'),
+      description: t('benefits.planning.desc')
+    },
+    {
+      icon: <Users className="w-8 h-8 text-green-400" />,
+      title: t('benefits.experience.title'),
+      description: t('benefits.experience.desc')
+    },
+    {
+      icon: <Award className="w-8 h-8 text-orange-400" />,
+      title: t('benefits.sales.title'),
+      description: t('benefits.sales.desc')
     }
-  };
+  ];
 
-  const navigateToDashboard = (pathType?: string) => {
-    if (!pathType && userPath) {
-      pathType = userPath.type;
+  const testimonials = [
+    {
+      name: t('testimonials.ana.name'),
+      role: t('testimonials.ana.role'),
+      content: t('testimonials.ana.content'),
+      rating: 5
+    },
+    {
+      name: t('testimonials.mihai.name'),
+      role: t('testimonials.mihai.role'),
+      content: t('testimonials.mihai.content'),
+      rating: 5
+    },
+    {
+      name: t('testimonials.elena.name'),
+      role: t('testimonials.elena.role'),
+      content: t('testimonials.elena.content'),
+      rating: 5
     }
+  ];
 
-    switch (pathType) {
-      case 'gamer':
-        navigate('/gamer-dashboard');
-        break;
-      case 'explorer-advanced':
-        navigate('/explorer-advanced-dashboard');
-        break;
-      case 'explorer-beginner':
-        navigate('/explorer-beginner-dashboard');
-        break;
-      case 'senior-friendly':
-        navigate('/senior-dashboard');
-        break;
-      default:
-        // Default to beginner if no path specified
-        navigate('/explorer-beginner-dashboard');
-    }
-  };
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-blue-700 overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-10 left-10 w-32 h-32 bg-blue-400/20 rounded-full blur-xl animate-pulse"></div>
+        <div className="absolute top-1/3 right-20 w-48 h-48 bg-purple-400/20 rounded-full blur-2xl animate-float"></div>
+        <div className="absolute bottom-20 left-1/4 w-40 h-40 bg-green-400/20 rounded-full blur-xl animate-pulse-slow"></div>
+        <div className="absolute top-1/2 left-1/2 w-24 h-24 bg-orange-400/30 rounded-full blur-lg animate-float"></div>
+      </div>
 
-  const handleQuizComplete = (userPath: UserPath) => {
-    setShowQuiz(false);
-    setQuizCompleted(true);
-    setUserPath(userPath);
-    
-    // Don't mark first login as complete yet - do it when user makes a choice
-  };
+      {/* Header */}
+      <header className="relative z-50 bg-white/10 backdrop-blur-md border-b border-white/20">
+        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <Globe className="w-8 h-8 text-white" />
+            <div className="text-2xl font-bold text-white">
+              Trajecta
+            </div>
+            <span className="text-white/80 text-sm">Călătorii Personalizate</span>
+          </div>
+          
+          <div className="hidden md:flex items-center gap-8 text-white/90">
+            <button className="hover:text-white transition-colors">{t('header.about')}</button>
+            <button className="hover:text-white transition-colors">{t('header.features')}</button>
+            <button className="hover:text-white transition-colors">{t('header.testimonials')}</button>
+            <LanguageSelector />
+          </div>
 
-  const handleAcceptRecommendation = () => {
-    if (userPath && user) {
-      // Update user with selected path and mark first login complete
-      const updatedUser = { ...user, userPath, profileCompleted: true, isFirstLogin: false };
-      updateUser(updatedUser);
-    }
-    
-    setPathSelected(true);
-    setQuizCompleted(false);
-    navigateToDashboard();
-  };
+          <div className="flex gap-3">
+            <Button 
+              variant="ghost" 
+              onClick={() => setAuthDialog('login')}
+              className="text-white border-white/30 hover:bg-white/10"
+            >
+              {t('header.login')}
+            </Button>
+            <Button 
+              onClick={() => setAuthDialog('register')}
+              className="bg-white text-blue-600 hover:bg-gray-100"
+            >
+              {t('header.register')}
+            </Button>
+          </div>
+        </div>
+      </header>
 
-  const handleTryAllPaths = () => {
-    if (user) {
-      // Mark profile as completed and first login complete
-      const updatedUser = { ...user, profileCompleted: true, isFirstLogin: false };
-      updateUser(updatedUser);
-    }
-    
-    setQuizCompleted(false);
-    setShowManualSelection(true);
-  };
+      {/* Hero Section */}
+      <section className="relative z-10 pt-20 pb-32">
+        <div className="container mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="text-white">
+              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
+                <Star className="w-4 h-4 text-yellow-400" />
+                <span className="text-sm">{t('hero.badge')}</span>
+              </div>
+              
+              <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+                {t('hero.title')} <span className="text-yellow-400">Trajecta</span>
+              </h1>
+              
+              <p className="text-xl text-white/90 mb-8 leading-relaxed">
+                {t('hero.subtitle')}
+              </p>
 
-  const handleChooseManually = () => {
-    if (user) {
-      // Mark profile as completed and first login complete
-      const updatedUser = { ...user, profileCompleted: true, isFirstLogin: false };
-      updateUser(updatedUser);
-    }
-    
-    setQuizCompleted(false);
-    setShowManualSelection(true);
-  };
+              <div className="flex items-center gap-8 mb-8 text-white/80">
+                <div className="flex items-center gap-2">
+                  <Users className="w-5 h-5 text-green-400" />
+                  <span>{t('hero.users')}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-5 h-5 text-blue-400" />
+                  <span>{t('hero.destinations')}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Star className="w-5 h-5 text-yellow-400" />
+                  <span>{t('hero.rating')}</span>
+                </div>
+              </div>
 
-  // Show quiz
-  if (showQuiz && !quizCompleted) {
-    return <ProfileQuiz onComplete={handleQuizComplete} />;
-  }
+              <Button 
+                size="lg" 
+                onClick={() => setAuthDialog('register')}
+                className="bg-orange-500 hover:bg-orange-600 text-white text-lg px-8 py-4 rounded-xl animate-pulse-slow"
+              >
+                {t('hero.cta')}
+              </Button>
+            </div>
 
-  // Show recommendation
-  if (quizCompleted && userPath && !pathSelected && !showManualSelection) {
-    return (
-      <PathRecommendation
-        userPath={userPath}
-        onAccept={handleAcceptRecommendation}
-        onTryAll={handleTryAllPaths}
-        onChooseManually={handleChooseManually}
-      />
-    );
-  }
+            {/* Right side - Interactive Travel Paths */}
+            <div className="relative">
+              <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-3 h-3 bg-red-400 rounded-full"></div>
+                  <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                  <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                </div>
 
-  // Show manual selection
-  if (showManualSelection) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 flex items-center justify-center p-4">
-        <div className="w-full max-w-4xl">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Alege Calea Ta de Utilizare 🎯
-            </h1>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-gradient-to-br from-yellow-400/20 to-orange-500/20 p-4 rounded-xl border border-yellow-400/30">
+                    <div className="text-2xl mb-2">🎮</div>
+                    <div className="text-white font-medium">{t('paths.gamer')}</div>
+                  </div>
+                  <div className="bg-gradient-to-br from-blue-400/20 to-purple-500/20 p-4 rounded-xl border border-blue-400/30">
+                    <div className="text-2xl mb-2">🗺️</div>
+                    <div className="text-white font-medium">{t('paths.explorer')}</div>
+                  </div>
+                  <div className="bg-gradient-to-br from-green-400/20 to-blue-500/20 p-4 rounded-xl border border-green-400/30">
+                    <div className="text-2xl mb-2">☀️</div>
+                    <div className="text-white font-medium">{t('paths.beginner')}</div>
+                  </div>
+                  <div className="bg-gradient-to-br from-purple-400/20 to-pink-500/20 p-4 rounded-xl border border-purple-400/30">
+                    <div className="text-2xl mb-2">👴</div>
+                    <div className="text-white font-medium">{t('paths.senior')}</div>
+                  </div>
+                </div>
+
+                <div className="mt-6 text-center">
+                  <div className="text-white/60 text-sm mb-2">{t('paths.choose')}</div>
+                  <div className="flex justify-center">
+                    <div className="w-8 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+          <ChevronDown className="w-8 h-8 text-white/70" />
+        </div>
+      </section>
+
+      {/* Benefits Section */}
+      <section className="py-20 bg-white relative">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              {t('benefits.title')} <span className="text-blue-600">Trajecta</span>?
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              {t('benefits.subtitle')}
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {benefits.map((benefit, index) => (
+              <Card key={index} className="text-center p-6 hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-blue-50 to-purple-50 hover:-translate-y-2">
+                <CardContent className="p-6">
+                  <div className="flex justify-center mb-4 animate-float">
+                    {benefit.icon}
+                  </div>
+                  <h3 className="text-xl font-semibold mb-3 text-gray-900">{benefit.title}</h3>
+                  <p className="text-gray-600">{benefit.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              {t('pricing.title')}
+            </h2>
             <p className="text-xl text-gray-600">
-              Selectează tipul de experiență care ți se potrivește cel mai bine
+              {t('pricing.subtitle')}
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6 mb-8">
-            <button
-              onClick={() => navigateToDashboard('gamer')}
-              className="h-32 bg-gradient-to-r from-purple-600 to-blue-600 hover:opacity-90 text-white font-semibold text-lg flex flex-col items-center justify-center rounded-lg transition-all duration-300 transform hover:scale-105"
-            >
-              <span className="text-4xl mb-2">🎮</span>
-              Gamer Path
-            </button>
-            <button
-              onClick={() => navigateToDashboard('explorer-advanced')}
-              className="h-32 bg-gradient-to-r from-green-600 to-teal-600 hover:opacity-90 text-white font-semibold text-lg flex flex-col items-center justify-center rounded-lg transition-all duration-300 transform hover:scale-105"
-            >
-              <span className="text-4xl mb-2">🧭</span>
-              Explorer Advanced
-            </button>
-            <button
-              onClick={() => navigateToDashboard('explorer-beginner')}
-              className="h-32 bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-90 text-white font-semibold text-lg flex flex-col items-center justify-center rounded-lg transition-all duration-300 transform hover:scale-105"
-            >
-              <span className="text-4xl mb-2">🌟</span>
-              Explorer Beginner
-            </button>
-            <button
-              onClick={() => navigateToDashboard('senior-friendly')}
-              className="h-32 bg-gradient-to-r from-orange-600 to-red-600 hover:opacity-90 text-white font-semibold text-lg flex flex-col items-center justify-center rounded-lg transition-all duration-300 transform hover:scale-105"
-            >
-              <span className="text-4xl mb-2">👴</span>
-              Senior Friendly
-            </button>
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {pricingPlans.map((plan, index) => (
+              <div 
+                key={index} 
+                className="perspective-1000 h-96"
+                onMouseEnter={() => setFlippedCard(index)}
+                onMouseLeave={() => setFlippedCard(null)}
+              >
+                <div className={`relative w-full h-full transition-transform duration-700 preserve-3d ${flippedCard === index ? 'transform-flip' : ''}`}>
+                  {/* Front of card */}
+                  <Card className={`absolute inset-0 backface-hidden ${plan.popular ? 'ring-2 ring-blue-500 shadow-xl scale-105' : 'shadow-lg'} hover:shadow-xl transition-all duration-300`}>
+                    {plan.popular && (
+                      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                        <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-1 rounded-full text-sm font-medium">
+                          {t('pricing.popular')}
+                        </span>
+                      </div>
+                    )}
+                    <CardContent className="p-8 text-center h-full flex flex-col justify-between">
+                      <div>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
+                        <p className="text-gray-600 mb-6">{plan.tagline}</p>
+                        <div className="mb-6">
+                          <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
+                          <span className="text-gray-600">{plan.period}</span>
+                        </div>
+                        <ul className="space-y-3 mb-8">
+                          {plan.features.map((feature, i) => (
+                            <li key={i} className="flex items-center justify-center gap-2">
+                              <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
+                              <span className="text-gray-700 text-sm">{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <Button 
+                        className={`w-full ${plan.popular ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700' : ''}`}
+                        onClick={() => setAuthDialog('register')}
+                      >
+                        {t('pricing.choose')} {plan.name}
+                      </Button>
+                    </CardContent>
+                  </Card>
+
+                  {/* Back of card */}
+                  <Card className="absolute inset-0 backface-hidden transform-flip shadow-lg">
+                    <CardContent className="p-8 text-center h-full flex flex-col justify-between">
+                      <div>
+                        <h3 className="text-xl font-bold text-gray-900 mb-4">{t('pricing.details')} {plan.name}</h3>
+                        <ul className="space-y-2 text-sm">
+                          {plan.detailedFeatures.map((feature, i) => (
+                            <li key={i} className="flex items-start gap-2">
+                              <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                              <span className="text-gray-700 text-left">{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <Button 
+                        className="w-full mt-4"
+                        onClick={() => setAuthDialog('register')}
+                      >
+                        {t('pricing.start')}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
-    );
-  }
+      </section>
 
-  // Show simplified landing page (only for non-logged users)
-  return (
-    <div className="min-h-screen bg-white">
-      <Header 
-        onLoginClick={() => setShowLoginModal(true)} 
-        onRegisterClick={() => setShowRegisterModal(true)} 
-      />
-      
-      <HeroSection onGetStarted={handleGetStarted} />
-      
-      <FeaturesSection />
-      
-      <AboutSection onGetStarted={handleGetStarted} />
-      
-      <TestimonialsSection onGetStarted={handleGetStarted} />
-      
-      {/* Footer Section */}
+      {/* Testimonials */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              {t('testimonials.title')}
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <Card key={index} className="text-center p-6 hover:shadow-lg transition-all duration-300 border border-gray-100">
+                <CardContent className="p-6">
+                  <div className="flex justify-center mb-4">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                    ))}
+                  </div>
+                  <p className="text-gray-700 mb-6 italic">"{testimonial.content}"</p>
+                  <div>
+                    <h4 className="font-semibold text-gray-900">{testimonial.name}</h4>
+                    <p className="text-gray-600 text-sm">{testimonial.role}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+        <div className="container mx-auto px-6 text-center">
+          <h2 className="text-4xl font-bold mb-6">
+            {t('cta.title')}
+          </h2>
+          <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
+            {t('cta.subtitle')}
+          </p>
+          <Button 
+            size="lg" 
+            onClick={() => setAuthDialog('register')}
+            className="bg-white text-purple-600 hover:bg-gray-100 text-lg px-12 py-4 rounded-xl"
+          >
+            {t('cta.button')}
+          </Button>
+        </div>
+      </section>
+
+      {/* Footer */}
       <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="container mx-auto px-6">
           <div className="grid md:grid-cols-4 gap-8">
-            <div className="md:col-span-2">
-              <div className="flex items-center mb-4">
-                <span className="text-2xl font-bold text-blue-400">🌍 Trajecta</span>
-              </div>
-              <p className="text-gray-300 mb-4 max-w-md">
-                Descoperă lumea cu aplicația de călătorii personalizată care se adaptează stilului tău de viață.
-              </p>
-              <div className="flex space-x-4">
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  <span className="sr-only">Facebook</span>
-                  📘
-                </a>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  <span className="sr-only">Instagram</span>
-                  📸
-                </a>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  <span className="sr-only">Twitter</span>
-                  🐦
-                </a>
-              </div>
-            </div>
-            
             <div>
-              <h3 className="text-lg font-semibold mb-4">Legături Utile</h3>
-              <ul className="space-y-2">
-                <li><a href="#about" className="text-gray-300 hover:text-white transition-colors">Despre</a></li>
-                <li><a href="#features" className="text-gray-300 hover:text-white transition-colors">Caracteristici</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Prețuri</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Blog</a></li>
+              <div className="flex items-center gap-2 mb-4">
+                <Globe className="w-6 h-6 text-blue-400" />
+                <div className="text-xl font-bold">Trajecta</div>
+              </div>
+              <p className="text-gray-400">
+                Platforma AI pentru călătorii personalizate
+              </p>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-4">{t('footer.product')}</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li>{t('header.features')}</li>
+                <li>Prețuri</li>
+                <li>API</li>
+                <li>Integrări</li>
               </ul>
             </div>
-            
             <div>
-              <h3 className="text-lg font-semibold mb-4">Contact</h3>
-              <ul className="space-y-2 text-gray-300">
-                <li>📧 contact@trajecta.ro</li>
-                <li>📞 +40 123 456 789</li>
-                <li>📍 București, România</li>
+              <h4 className="font-semibold mb-4">{t('footer.company')}</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li>{t('header.about')}</li>
+                <li>Cariere</li>
+                <li>Contact</li>
+                <li>Blog</li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-4">{t('footer.support')}</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li>Help Center</li>
+                <li>Documentație</li>
+                <li>Status</li>
+                <li>Securitate</li>
               </ul>
             </div>
           </div>
-          
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Trajecta. Toate drepturile rezervate.</p>
+            <p>&copy; 2024 Trajecta. {t('footer.copyright')}</p>
           </div>
         </div>
       </footer>
 
-      <LoginModal
-        isOpen={showLoginModal}
-        onClose={() => setShowLoginModal(false)}
-        onSwitchToRegister={() => {
-          setShowLoginModal(false);
-          setShowRegisterModal(true);
-        }}
-      />
-
-      <RegisterModal
-        isOpen={showRegisterModal}
-        onClose={() => setShowRegisterModal(false)}
-        onSwitchToLogin={() => {
-          setShowRegisterModal(false);
-          setShowLoginModal(true);
-        }}
+      {/* Auth Dialog */}
+      <AuthDialog 
+        open={authDialog !== null}
+        onOpenChange={() => setAuthDialog(null)}
+        mode={authDialog || 'login'}
+        onModeChange={setAuthDialog}
       />
     </div>
   );
