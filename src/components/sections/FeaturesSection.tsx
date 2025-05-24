@@ -47,54 +47,9 @@ export const FeaturesSection = () => {
                                 <p className="text-lg opacity-90 leading-relaxed">
                                     {feature.description}
                                 </p>
-
-                                {/* Demo preview */}
-                                <div className="mt-6 bg-white/10 rounded-lg p-4 backdrop-blur-sm">
-                                    <div className="space-y-2">
-                                        <div className="flex items-center space-x-2">
-                                            <div className="w-2 h-2 bg-white/60 rounded-full"></div>
-                                            <div className="h-2 bg-white/40 rounded flex-1"></div>
-                                        </div>
-                                        <div className="flex items-center space-x-2">
-                                            <div className="w-2 h-2 bg-white/60 rounded-full"></div>
-                                            <div className="h-2 bg-white/40 rounded w-3/4"></div>
-                                        </div>
-                                        <div className="flex items-center space-x-2">
-                                            <div className="w-2 h-2 bg-white/60 rounded-full"></div>
-                                            <div className="h-2 bg-white/40 rounded w-1/2"></div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     ))}
-                </div>
-
-                {/* Feature highlights */}
-                <div className="mt-16 grid md:grid-cols-3 gap-8">
-                    <div className="text-center">
-                        <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                            <span className="text-2xl">⚡</span>
-                        </div>
-                        <h4 className="font-semibold mb-2">Setup Rapid</h4>
-                        <p className="text-gray-600">Chestionar de 2 minute pentru personalizare completă</p>
-                    </div>
-
-                    <div className="text-center">
-                        <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                            <span className="text-2xl">🔄</span>
-                        </div>
-                        <h4 className="font-semibold mb-2">Flexibilitate</h4>
-                        <p className="text-gray-600">Poți schimba calea de utilizare oricând</p>
-                    </div>
-
-                    <div className="text-center">
-                        <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                            <span className="text-2xl">📱</span>
-                        </div>
-                        <h4 className="font-semibold mb-2">Responsive</h4>
-                        <p className="text-gray-600">Perfect optimizat pentru telefon, tabletă și desktop</p>
-                    </div>
                 </div>
             </div>
         </section>

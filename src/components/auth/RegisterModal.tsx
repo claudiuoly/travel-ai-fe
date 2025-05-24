@@ -89,6 +89,7 @@ export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }: RegisterModa
                 phone: formData.phone,
                 username: formData.username,
                 password: formData.password,
+                confirmPassword: formData.confirmPassword,
                 age: parseInt(formData.age)
             });
 
@@ -101,14 +102,14 @@ export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }: RegisterModa
             } else {
                 toast({
                     title: "Eroare de înregistrare",
-                    description: "A apărut o eroare. Te rugăm să încerci din nou.",
+                    description: "Datele introduse sunt invalide sau utilizatorul există deja. Verifică informațiile și încearcă din nou.",
                     variant: "destructive",
                 });
             }
         } catch (error) {
             toast({
-                title: "Eroare",
-                description: "A apărut o eroare. Te rugăm să încerci din nou.",
+                title: "Eroare de înregistrare",
+                description: "Nu s-a putut conecta la server. Verifică conexiunea la internet și încearcă din nou.",
                 variant: "destructive",
             });
         } finally {

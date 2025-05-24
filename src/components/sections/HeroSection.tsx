@@ -37,31 +37,6 @@ export const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
                             >
                                 🚀 Începe Aventura
                             </Button>
-
-                            <Button
-                                variant="outline"
-                                size="lg"
-                                className="border-2 border-white text-white hover:bg-white hover:text-blue-600 font-semibold px-8 py-4 text-lg transition-all duration-300 flex items-center gap-2"
-                            >
-                                <Play className="w-5 h-5" />
-                                Vezi Demo
-                            </Button>
-                        </div>
-
-                        {/* Stats */}
-                        <div className="grid grid-cols-3 gap-8 mt-12 pt-8 border-t border-blue-400/30">
-                            <div className="text-center">
-                                <div className="text-2xl font-bold text-yellow-400">10K+</div>
-                                <div className="text-blue-200">Utilizatori Activi</div>
-                            </div>
-                            <div className="text-center">
-                                <div className="text-2xl font-bold text-yellow-400">50+</div>
-                                <div className="text-blue-200">Destinații</div>
-                            </div>
-                            <div className="text-center">
-                                <div className="text-2xl font-bold text-yellow-400">4.9⭐</div>
-                                <div className="text-blue-200">Rating Mediu</div>
-                            </div>
                         </div>
                     </div>
 
