@@ -111,13 +111,13 @@ export const TestimonialsSection = ({ onGetStarted }: TestimonialsSectionProps) 
 
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
                     {testimonials.map((testimonial, index) => (
-                        <div key={index} className="group">
-                            <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 hover:scale-105 border border-white/50 relative overflow-hidden">
+                        <div key={index} className="group h-full">
+                            <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 hover:scale-105 border border-white/50 relative overflow-hidden h-full flex flex-col">
                                 {/* Background gradient on hover */}
                                 <div className={`absolute inset-0 bg-gradient-to-br ${testimonial.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500 rounded-3xl`}></div>
                                 
                                 {/* Avatar and gradient header */}
-                                <div className={`bg-gradient-to-r ${testimonial.gradient} ${testimonial.hoverGradient} rounded-2xl p-6 mb-6 text-center relative overflow-hidden transform group-hover:scale-105 transition-transform duration-300`}>
+                                <div className={`bg-gradient-to-r ${testimonial.gradient} ${testimonial.hoverGradient} rounded-2xl p-6 mb-6 text-center relative overflow-hidden transform group-hover:scale-105 transition-transform duration-300 flex-shrink-0`}>
                                     {/* Pattern overlay */}
                                     <div className="absolute inset-0 opacity-20">
                                         <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22white%22%20fill-opacity%3D%220.3%22%3E%3Ccircle%20cx%3D%2215%22%20cy%3D%2215%22%20r%3D%221%22/%3E%3C/g%3E%3C/svg%3E')] bg-repeat"></div>
@@ -132,7 +132,7 @@ export const TestimonialsSection = ({ onGetStarted }: TestimonialsSectionProps) 
                                 </div>
 
                                 {/* Rating and trips */}
-                                <div className="flex justify-between items-center mb-4">
+                                <div className="flex justify-between items-center mb-4 flex-shrink-0">
                                     <div className="flex">
                                         {[...Array(testimonial.rating)].map((_, i) => (
                                             <span key={i} className="text-yellow-400 text-lg group-hover:animate-pulse" style={{animationDelay: `${i * 100}ms`}}>⭐</span>
@@ -143,14 +143,16 @@ export const TestimonialsSection = ({ onGetStarted }: TestimonialsSectionProps) 
                                     </div>
                                 </div>
 
-                                {/* Comment */}
-                                <p className="text-gray-600 leading-relaxed text-sm mb-4 relative z-10">
-                                    "{testimonial.comment}"
-                                </p>
+                                {/* Comment - flex-grow pentru a ocupa spațiul rămas */}
+                                <div className="flex-grow flex flex-col justify-between">
+                                    <p className="text-gray-600 leading-relaxed text-sm mb-4 relative z-10">
+                                        "{testimonial.comment}"
+                                    </p>
 
-                                {/* Bottom decoration */}
-                                <div className="flex justify-center">
-                                    <div className="w-12 h-1 bg-gradient-to-r from-transparent via-gray-300 to-transparent group-hover:via-blue-400 transition-colors duration-500"></div>
+                                    {/* Bottom decoration */}
+                                    <div className="flex justify-center mt-auto">
+                                        <div className="w-12 h-1 bg-gradient-to-r from-transparent via-gray-300 to-transparent group-hover:via-blue-400 transition-colors duration-500"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -13,24 +14,24 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 const App = () => (
-    <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-            <AuthProvider>
-                <Toaster />
-                <Sonner />
-                <BrowserRouter>
-                    <Routes>
-                        <Route path="/" element={<Index />} />
-                        <Route path="/senior-dashboard" element={<SeniorDashboard />} />
-                        <Route path="/gamer-dashboard" element={<GamerDashboard />} />
-                        <Route path="/explorer-advanced-dashboard" element={<ExplorerDashboard type="advanced" />} />
-                        <Route path="/explorer-beginner-dashboard" element={<ExplorerDashboard type="beginner" />} />
-                        <Route path="*" element={<NotFound />} />
-                    </Routes>
-                </BrowserRouter>
-            </AuthProvider>
-        </TooltipProvider>
-    </QueryClientProvider>
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <AuthProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/senior-dashboard" element={<SeniorDashboard />} />
+            <Route path="/gamer-dashboard" element={<GamerDashboard />} />
+            <Route path="/explorer-advanced-dashboard" element={<ExplorerDashboard type="advanced" />} />
+            <Route path="/explorer-beginner-dashboard" element={<ExplorerDashboard type="beginner" />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </TooltipProvider>
+  </QueryClientProvider>
 );
 
 export default App;
