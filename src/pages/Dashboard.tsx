@@ -6,8 +6,8 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
-import { Send, Mic, MicOff, LogOut, MapPin, Calendar, DollarSign, Users, Plane } from 'lucide-react';
-import { getUser, logout, isAuthenticated } from '@/lib/auth';
+import { Send, Mic, MicOff, LogOut, MapPin, Calendar, DollarSign, Users, Plane, Clock, Star } from 'lucide-react';
+import { getUser, logout, isAuthenticated, sendChatMessage } from '@/lib/auth';
 
 interface Message {
   id: number;
@@ -15,6 +15,19 @@ interface Message {
   isUser: boolean;
   timestamp: Date;
   data?: any;
+  isTyping?: boolean;
+}
+
+interface Trip {
+  id: number;
+  destination: string;
+  country: string;
+  duration: string;
+  budget: string;
+  type: string;
+  status: 'completed' | 'planned' | 'wishlist';
+  rating?: number;
+  description: string;
 }
 
 const Dashboard = () => {
@@ -23,15 +36,93 @@ const Dashboard = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "Bună! Sunt asistentul tău AI pentru planificarea călătoriilor. Cum te pot ajuta astăzi?",
+      text: "Hello! I'm Trajecta, your AI travel planning assistant. How can I help you today?",
       isUser: false,
       timestamp: new Date()
     }
   ]);
   const [inputMessage, setInputMessage] = useState('');
   const [isVoiceActive, setIsVoiceActive] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [chatKey, setChatKey] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const user = getUser();
+
+  // Hardcoded trips
+  const trips: Trip[] = [
+    {
+      id: 1,
+      destination: "Paris",
+      country: "France",
+      duration: "5 days",
+      budget: "€1,200",
+      type: "Cultural",
+      status: "completed",
+      rating: 4.8,
+      description: "I want to plan a 5-day cultural trip to Paris, France with a budget of €1,200. I'm interested in visiting museums, historic sites, trying local cuisine, and experiencing the romantic atmosphere of the city."
+    },
+    {
+      id: 2,
+      destination: "Tokyo",
+      country: "Japan",
+      duration: "7 days",
+      budget: "€2,500",
+      type: "Adventure",
+      status: "planned",
+      description: "I'm planning a 7-day adventure trip to Tokyo, Japan with a budget of €2,500. I want to experience modern Japanese culture, visit temples, try authentic sushi, explore neighborhoods like Shibuya and Harajuku, and maybe take a day trip to Mount Fuji."
+    },
+    {
+      id: 3,
+      destination: "Santorini",
+      country: "Greece",
+      duration: "4 days",
+      budget: "€800",
+      type: "Relaxation",
+      status: "wishlist",
+      description: "I'm dreaming of a 4-day relaxing getaway to Santorini, Greece with a budget of €800. I want to enjoy beautiful sunsets, stay in a traditional white-washed hotel, visit local wineries, and spend time on the beautiful beaches."
+    },
+    {
+      id: 4,
+      destination: "New York",
+      country: "USA",
+      duration: "6 days",
+      budget: "€2,000",
+      type: "Urban",
+      status: "completed",
+      rating: 4.6,
+      description: "I want to plan a 6-day urban adventure in New York, USA with a budget of €2,000. I'm interested in Broadway shows, visiting Central Park, exploring different neighborhoods, trying diverse food scenes, and seeing iconic landmarks like the Statue of Liberty."
+    },
+    {
+      id: 5,
+      destination: "Bali",
+      country: "Indonesia",
+      duration: "10 days",
+      budget: "€1,500",
+      type: "Tropical",
+      status: "planned",
+      description: "I'm planning a 10-day tropical paradise trip to Bali, Indonesia with a budget of €1,500. I want to experience beautiful beaches, visit ancient temples, try local Indonesian cuisine, enjoy spa treatments, and explore rice terraces and volcanic landscapes."
+    },
+    {
+      id: 6,
+      destination: "Barcelona",
+      country: "Spain",
+      duration: "5 days",
+      budget: "€900",
+      type: "Cultural",
+      status: "wishlist",
+      description: "I'm considering a 5-day cultural trip to Barcelona, Spain with a budget of €900. I want to see Gaudí's architecture including Sagrada Familia, enjoy tapas and local wine, explore the Gothic Quarter, and experience the vibrant nightlife."
+    },
+    {
+      id: 7,
+      destination: "Iceland",
+      country: "Iceland",
+      duration: "8 days",
+      budget: "€1,800",
+      type: "Nature",
+      status: "wishlist",
+      description: "I'm dreaming of an 8-day nature adventure in Iceland with a budget of €1,800. I want to see the Northern Lights, visit geysers and waterfalls, relax in hot springs like Blue Lagoon, and explore dramatic landscapes and glaciers."
+    }
+  ];
 
   useEffect(() => {
     // Check if user is authenticated
@@ -47,91 +138,135 @@ const Dashboard = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const addMessage = (text: string, isUser: boolean, data?: any) => {
+  const addMessage = (text: string, isUser: boolean, data?: any, isTyping?: boolean) => {
     const newMessage: Message = {
       id: Date.now(),
       text,
       isUser,
       timestamp: new Date(),
-      data
+      data,
+      isTyping
     };
     setMessages(prev => [...prev, newMessage]);
+    return newMessage.id;
   };
 
-  const handleSendMessage = () => {
-    if (!inputMessage.trim()) return;
+  const updateMessage = (id: number, text: string, isTyping?: boolean) => {
+    setMessages(prev => prev.map(msg => 
+      msg.id === id ? { ...msg, text, isTyping } : msg
+    ));
+  };
 
-    addMessage(inputMessage, true);
-    
-    // Simulate AI response
-    setTimeout(() => {
-      handleAIResponse(inputMessage);
-    }, 1000);
+  const removeMessage = (id: number) => {
+    setMessages(prev => prev.filter(msg => msg.id !== id));
+  };
 
+  const handleSendMessage = async () => {
+    if (!inputMessage.trim() || isLoading) return;
+
+    const userMessage = inputMessage.trim();
+    addMessage(userMessage, true);
     setInputMessage('');
-  };
+    setIsLoading(true);
 
-  const handleAIResponse = (userMessage: string) => {
-    const destination = extractDestination(userMessage);
-    const type = extractType(userMessage);
-    const budget = extractBudget(userMessage);
-    const days = extractDays(userMessage);
+    // Add typing indicator
+    const typingId = addMessage('Trajecta is typing...', false, undefined, true);
 
-    if (destination || type || budget || days) {
-      const response = `Excelent! Am înțeles că vrei să vizitezi ${destination || 'o destinație'} pentru ${type || 'o călătorie'}${budget ? ` cu un buget de ${budget}` : ''}${days ? ` pentru ${days} zile` : ''}. Îți voi pregăti câteva sugestii personalizate!`;
+    try {
+      const response = await sendChatMessage(userMessage);
       
-      addMessage(response, false, {
-        destination,
-        type,
-        budget,
-        days,
-        suggestions: [
-          { name: "Hotel Central Plaza", type: "Cazare", rating: 4.5, price: "150€/noapte" },
-          { name: "Tur ghidat în centrul istoric", type: "Activitate", rating: 4.8, price: "25€/persoană" },
-          { name: "Restaurant La Piazza", type: "Restaurant", rating: 4.6, price: "30€/persoană" }
-        ]
+      // Remove typing indicator
+      removeMessage(typingId);
+      
+      // Add AI response
+      addMessage(response.message, false);
+    } catch (error) {
+      // Remove typing indicator
+      removeMessage(typingId);
+      
+      // Show error message
+      addMessage('Sorry, there was an error. Please try again.', false);
+      
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Could not send message",
+        variant: "destructive"
       });
-    } else {
-      const responses = [
-        "Îmi poți spune unde ai vrea să călătorești?",
-        "Ce tip de călătorie preferi? Relaxare, aventură, cultură?",
-        "Care este bugetul tău aproximativ pentru această călătorie?",
-        "Pentru câte zile plănuiești să călătorești?"
-      ];
-      
-      const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-      addMessage(randomResponse, false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const extractDestination = (message: string): string | null => {
-    const destinations = ['Paris', 'Roma', 'Barcelona', 'Amsterdam', 'Praga', 'Viena', 'Budapesta'];
-    return destinations.find(dest => message.toLowerCase().includes(dest.toLowerCase())) || null;
+  const handleTripClick = (trip: Trip) => {
+    // Add the trip description as a user message
+    addMessage(trip.description, true);
+    
+    // Simulate sending to API
+    setIsLoading(true);
+    const typingId = addMessage('Trajecta is typing...', false, undefined, true);
+
+    setTimeout(async () => {
+      try {
+        const response = await sendChatMessage(trip.description);
+        removeMessage(typingId);
+        addMessage(response.message, false);
+      } catch (error) {
+        removeMessage(typingId);
+        addMessage('Sorry, there was an error. Please try again.', false);
+        toast({
+          title: "Error",
+          description: "Could not process trip request",
+          variant: "destructive"
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    }, 1000);
+
+    toast({
+      title: "Trip Selected",
+      description: `Planning your trip to ${trip.destination}!`
+    });
   };
 
-  const extractType = (message: string): string | null => {
-    if (message.toLowerCase().includes('relaxare')) return 'relaxare';
-    if (message.toLowerCase().includes('aventură')) return 'aventură';
-    if (message.toLowerCase().includes('cultură')) return 'cultură';
-    return null;
-  };
-
-  const extractBudget = (message: string): string | null => {
-    const budgetMatch = message.match(/(\d+)\s*(euro|eur|€)/i);
-    return budgetMatch ? `${budgetMatch[1]}€` : null;
-  };
-
-  const extractDays = (message: string): string | null => {
-    const daysMatch = message.match(/(\d+)\s*(zile|zi)/i);
-    return daysMatch ? daysMatch[1] : null;
+  const handleNewTrip = () => {
+    // Clear input field first
+    setInputMessage('');
+    
+    // Reset loading state
+    setIsLoading(false);
+    
+    // Force complete re-render by changing key
+    setChatKey(prev => prev + 1);
+    
+    // Reset chat to initial state with a completely new array
+    const initialMessage = {
+      id: Date.now(),
+      text: "Hello! I'm Trajecta, your AI travel planning assistant. How can I help you today?",
+      isUser: false,
+      timestamp: new Date()
+    };
+    
+    // Use setTimeout to ensure state updates are processed
+    setTimeout(() => {
+      setMessages([initialMessage]);
+      scrollToBottom();
+    }, 50);
+    
+    toast({
+      title: "Chat Reset",
+      description: "Let's plan a new trip together!"
+    });
+    
+    console.log('Chat reset - new messages:', [initialMessage]);
   };
 
   const toggleVoice = () => {
     setIsVoiceActive(!isVoiceActive);
     if (!isVoiceActive) {
       toast({
-        title: "Funcție în dezvoltare",
-        description: "Recunoașterea vocală va fi disponibilă în curând!"
+        title: "Feature in Development",
+        description: "Voice recognition will be available soon!"
       });
     }
   };
@@ -139,14 +274,32 @@ const Dashboard = () => {
   const handleLogout = () => {
     logout();
     toast({
-      title: "Deconectare reușită",
-      description: "La revedere!"
+      title: "Logged Out Successfully",
+      description: "Goodbye!"
     });
     navigate('/');
   };
 
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'completed': return 'bg-green-50 text-green-700 border-green-200';
+      case 'planned': return 'bg-blue-50 text-blue-700 border-blue-200';
+      case 'wishlist': return 'bg-purple-50 text-purple-700 border-purple-200';
+      default: return 'bg-gray-50 text-gray-700 border-gray-200';
+    }
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'completed': return <Star className="w-4 h-4" />;
+      case 'planned': return <Calendar className="w-4 h-4" />;
+      case 'wishlist': return <Clock className="w-4 h-4" />;
+      default: return <MapPin className="w-4 h-4" />;
+    }
+  };
+
   if (!user) {
-    return null; // This shouldn't happen due to the useEffect check, but just in case
+    return null;
   }
 
   return (
@@ -183,46 +336,60 @@ const Dashboard = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 h-[calc(100vh-8rem)]">
           {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Călătoriile tale</CardTitle>
+          <div className="lg:col-span-1 flex flex-col h-full">
+            <Card className="flex-1 flex flex-col min-h-0">
+              <CardHeader className="flex-shrink-0">
+                <CardTitle className="text-lg">Your Trips</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center space-x-3 p-3 bg-blue-50 rounded-lg">
-                  <MapPin className="w-5 h-5 text-blue-600" />
-                  <div>
-                    <p className="font-medium text-sm">Paris, Franța</p>
-                    <p className="text-xs text-gray-500">15-20 Mai 2024</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center space-x-3 p-3 bg-purple-50 rounded-lg">
-                  <Calendar className="w-5 h-5 text-purple-600" />
-                  <div>
-                    <p className="font-medium text-sm">Roma, Italia</p>
-                    <p className="text-xs text-gray-500">Planificat</p>
-                  </div>
+              <CardContent className="flex-1 flex flex-col min-h-0 pb-4">
+                <div className="flex-1 overflow-y-auto space-y-3 mb-4 pr-2 min-h-0 trips-scroll" style={{ maxHeight: 'calc(100vh - 30rem)' }}>
+                  {trips.map((trip) => (
+                    <div
+                      key={trip.id}
+                      onClick={() => handleTripClick(trip)}
+                      className="flex items-center space-x-3 p-3 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors border border-gray-100 hover:border-gray-200"
+                    >
+                      <div className={`p-2 rounded-full ${getStatusColor(trip.status)}`}>
+                        {getStatusIcon(trip.status)}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between">
+                          <p className="font-medium text-sm truncate">{trip.destination}</p>
+                          {trip.rating && (
+                            <div className="flex items-center space-x-1">
+                              <Star className="w-3 h-3 text-yellow-500 fill-current" />
+                              <span className="text-xs text-gray-600">{trip.rating}</span>
+                            </div>
+                          )}
+                        </div>
+                        <p className="text-xs text-gray-500">{trip.country}</p>
+                        <div className="flex items-center justify-between mt-1">
+                          <span className="text-xs text-gray-600">{trip.duration}</span>
+                          <span className="text-xs font-medium text-blue-600">{trip.budget}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
-                <Button className="w-full" variant="outline">
+                <Button className="w-full flex-shrink-0" variant="outline" onClick={handleNewTrip}>
                   <Plane className="w-4 h-4 mr-2" />
-                  Planifică călătorie nouă
+                  Plan New Trip
                 </Button>
               </CardContent>
             </Card>
 
-            <Card className="mt-6">
-              <CardHeader>
-                <CardTitle className="text-lg">Statistici</CardTitle>
+            <Card className="mt-4 flex-shrink-0">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg">Statistics</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-3 pt-0">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <MapPin className="w-4 h-4 text-blue-600" />
-                    <span className="text-sm">Destinații vizitate</span>
+                    <span className="text-sm">Destinations Visited</span>
                   </div>
                   <span className="font-semibold">12</span>
                 </div>
@@ -230,7 +397,7 @@ const Dashboard = () => {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <DollarSign className="w-4 h-4 text-green-600" />
-                    <span className="text-sm">Economii totale</span>
+                    <span className="text-sm">Total Savings</span>
                   </div>
                   <span className="font-semibold">€2,450</span>
                 </div>
@@ -238,7 +405,7 @@ const Dashboard = () => {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <Users className="w-4 h-4 text-purple-600" />
-                    <span className="text-sm">Călătorii în grup</span>
+                    <span className="text-sm">Group Trips</span>
                   </div>
                   <span className="font-semibold">8</span>
                 </div>
@@ -247,20 +414,24 @@ const Dashboard = () => {
           </div>
 
           {/* Chat Area */}
-          <div className="lg:col-span-3">
-            <Card className="h-[600px] flex flex-col">
-              <CardHeader>
+          <div className="lg:col-span-3 flex flex-col h-full">
+            <Card className="flex-1 flex flex-col min-h-0">
+              <CardHeader className="flex-shrink-0">
                 <CardTitle className="flex items-center space-x-2">
-                  <span>Asistent AI pentru Călătorii</span>
+                  <span>AI Travel Assistant</span>
                   <Badge variant="outline" className="text-green-600 border-green-600">
                     Online
                   </Badge>
                 </CardTitle>
               </CardHeader>
               
-              <CardContent className="flex-1 flex flex-col">
+              <CardContent className="flex-1 flex flex-col min-h-0 pb-4">
                 {/* Messages */}
-                <div className="flex-1 overflow-y-auto space-y-4 mb-4">
+                <div 
+                  key={chatKey}
+                  className="flex-1 overflow-y-auto space-y-4 mb-4 pr-2 min-h-0 chat-messages" 
+                  style={{ maxHeight: 'calc(100vh - 16rem)' }}
+                >
                   {messages.map((message) => (
                     <div
                       key={message.id}
@@ -273,7 +444,18 @@ const Dashboard = () => {
                             : 'bg-gray-100 text-gray-900'
                         }`}
                       >
-                        <p className="text-sm">{message.text}</p>
+                        {message.isTyping ? (
+                          <div className="flex items-center space-x-1">
+                            <span className="text-sm">{message.text}</span>
+                            <div className="flex space-x-1 ml-2">
+                              <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                              <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                              <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                            </div>
+                          </div>
+                        ) : (
+                          <p className="text-sm">{message.text}</p>
+                        )}
                         {message.data?.suggestions && (
                           <div className="mt-3 space-y-2">
                             {message.data.suggestions.map((suggestion: any, index: number) => (
@@ -290,12 +472,14 @@ const Dashboard = () => {
                             ))}
                           </div>
                         )}
-                        <p className="text-xs opacity-70 mt-1">
-                          {message.timestamp.toLocaleTimeString('ro-RO', { 
-                            hour: '2-digit', 
-                            minute: '2-digit' 
-                          })}
-                        </p>
+                        {!message.isTyping && (
+                          <p className="text-xs opacity-70 mt-1">
+                            {message.timestamp.toLocaleTimeString('en-US', { 
+                              hour: '2-digit', 
+                              minute: '2-digit' 
+                            })}
+                          </p>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -303,23 +487,33 @@ const Dashboard = () => {
                 </div>
 
                 {/* Input */}
-                <div className="flex space-x-2">
+                <div className="flex space-x-2 flex-shrink-0">
                   <Input
                     value={inputMessage}
                     onChange={(e) => setInputMessage(e.target.value)}
-                    placeholder="Întreabă-mă orice despre călătoria ta..."
-                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                    placeholder="Ask me anything about your trip..."
+                    onKeyPress={(e) => e.key === 'Enter' && !isLoading && handleSendMessage()}
+                    disabled={isLoading}
                     className="flex-1"
                   />
                   <Button
                     onClick={toggleVoice}
                     variant={isVoiceActive ? "default" : "outline"}
                     size="icon"
+                    disabled={isLoading}
                   >
                     {isVoiceActive ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
                   </Button>
-                  <Button onClick={handleSendMessage} size="icon">
-                    <Send className="w-4 h-4" />
+                  <Button 
+                    onClick={handleSendMessage} 
+                    size="icon"
+                    disabled={isLoading || !inputMessage.trim()}
+                  >
+                    {isLoading ? (
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    ) : (
+                      <Send className="w-4 h-4" />
+                    )}
                   </Button>
                 </div>
               </CardContent>

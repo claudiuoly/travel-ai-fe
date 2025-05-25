@@ -134,4 +134,19 @@ export const register = async (userData: {
   setToken(data.token);
   
   return data;
+};
+
+// Chat function
+export const sendChatMessage = async (message: string): Promise<{ message: string }> => {
+  const response = await apiRequest('/chat/message', {
+    method: 'POST',
+    body: JSON.stringify({ message }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Failed to send message');
+  }
+
+  return await response.json();
 }; 
