@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Mic, MicOff, Phone, PhoneOff, Volume2, VolumeX, X } from 'lucide-react';
+import { Mic, MicOff, Phone, PhoneOff, Volume2, VolumeX, X, Loader2 } from 'lucide-react';
 import { vapiService } from '@/lib/vapi';
 import { useToast } from "@/hooks/use-toast";
 
@@ -12,6 +12,7 @@ interface VoiceCallProps {
 
 export const VoiceCall: React.FC<VoiceCallProps> = ({ onMessage, className }) => {
   const [isCallActive, setIsCallActive] = useState(false);
+  const [isStartingCall, setIsStartingCall] = useState(false);
   const [isUserSpeaking, setIsUserSpeaking] = useState(false);
   const [volumeLevel, setVolumeLevel] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
@@ -24,6 +25,7 @@ export const VoiceCall: React.FC<VoiceCallProps> = ({ onMessage, className }) =>
     // Create unique callback functions to avoid duplicates
     const handleCallStart = () => {
       setIsCallActive(true);
+      setIsStartingCall(false); // Reset starting state when call actually starts
       setShowCallOverlay(true);
       setCallStartTime(new Date());
       toast({
@@ -52,6 +54,7 @@ export const VoiceCall: React.FC<VoiceCallProps> = ({ onMessage, className }) =>
       }
       
       setIsCallActive(false);
+      setIsStartingCall(false); // Reset starting state if call ends unexpectedly
       setShowCallOverlay(false);
       setIsUserSpeaking(false);
       setCallStartTime(null);
@@ -202,21 +205,46 @@ export const VoiceCall: React.FC<VoiceCallProps> = ({ onMessage, className }) =>
   }, [isCallActive, callStartTime]);
 
   const handleStartCall = async () => {
+    if (isStartingCall || isCallActive) {
+      return; // Prevent multiple calls
+    }
+
+    setIsStartingCall(true);
+    
+    // Set a timeout to reset isStartingCall if call doesn't start within 10 seconds
+    const startTimeout = setTimeout(() => {
+      if (isStartingCall && !isCallActive) {
+        setIsStartingCall(false);
+        toast({
+          title: "Connection Timeout",
+          description: "Failed to connect to the AI assistant. Please try again.",
+          variant: "destructive"
+        });
+      }
+    }, 10000);
+    
     try {
       // Test microphone access first
       const microphoneWorking = await vapiService.testMicrophone();
       if (!microphoneWorking) {
+        clearTimeout(startTimeout);
         toast({
           title: "Permission Required",
           description: "Please allow access to your microphone to start the voice call.",
           variant: "destructive"
         });
+        setIsStartingCall(false);
         return;
       }
 
       await vapiService.startCall();
+      // Note: isStartingCall will be set to false in handleCallStart callback
+      // Clear timeout since call started successfully
+      clearTimeout(startTimeout);
     } catch (error) {
+      clearTimeout(startTimeout);
       console.error('💥 VoiceCall: Failed to start call:', error);
+      setIsStartingCall(false);
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to start the voice call. Please try again.",
@@ -334,10 +362,20 @@ export const VoiceCall: React.FC<VoiceCallProps> = ({ onMessage, className }) =>
               {!isCallActive ? (
                 <Button
                   onClick={handleStartCall}
-                  className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-full flex items-center space-x-2"
+                  disabled={isStartingCall}
+                  className="bg-green-600 hover:bg-green-700 disabled:bg-green-400 disabled:cursor-not-allowed text-white px-6 py-2 rounded-full flex items-center space-x-2 transition-all duration-200"
                 >
-                  <Phone className="w-5 h-5" />
-                  <span>Start Call</span>
+                  {isStartingCall ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <span>Connecting...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Phone className="w-5 h-5" />
+                      <span>Start Call</span>
+                    </>
+                  )}
                 </Button>
               ) : (
                 <Button
@@ -351,10 +389,21 @@ export const VoiceCall: React.FC<VoiceCallProps> = ({ onMessage, className }) =>
             </div>
 
             {/* Instructions */}
-            {!isCallActive && (
+            {!isCallActive && !isStartingCall && (
               <p className="text-sm text-gray-600 text-center max-w-xs">
                 Tap to start a voice conversation with the AI assistant for trip planning.
               </p>
+            )}
+
+            {isStartingCall && (
+              <div className="text-center">
+                <p className="text-sm text-blue-600 font-medium animate-pulse">
+                  🔄 Connecting to AI Assistant...
+                </p>
+                <p className="text-xs text-gray-500 mt-1">
+                  Please wait while we establish the connection
+                </p>
+              </div>
             )}
 
             {isCallActive && (
