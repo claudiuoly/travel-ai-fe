@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,6 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { useNavigate } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
 import { Eye, EyeOff, Mail } from 'lucide-react';
+import { login, register } from '@/lib/auth';
 
 interface AuthDialogProps {
   open: boolean;
@@ -55,33 +55,24 @@ export const AuthDialog = ({ open, onOpenChange, mode, onModeChange }: AuthDialo
     e.preventDefault();
     setIsLoading(true);
 
-    if (loginData.identifier === 'test@gmail.com' && loginData.password === 'test') {
-      setTimeout(() => {
-        toast({
-          title: "Autentificare reușită!",
-          description: "Bine ai revenit în Trajecta!"
-        });
-        
-        localStorage.setItem('trajecta_user', JSON.stringify({
-          id: 1,
-          full_name: 'Test Test',
-          email: 'test@gmail.com',
-          username: 'test'
-        }));
-        
-        setIsLoading(false);
-        onOpenChange(false);
-        navigate('/dashboard');
-      }, 1500);
-    } else {
-      setTimeout(() => {
-        toast({
-          title: "Eroare",
-          description: "Email/username sau parolă incorecte",
-          variant: "destructive"
-        });
-        setIsLoading(false);
-      }, 1500);
+    try {
+      const data = await login(loginData.identifier, loginData.password);
+      
+      toast({
+        title: "Autentificare reușită!",
+        description: `Bine ai revenit, ${data.user.full_name}!`
+      });
+      
+      onOpenChange(false);
+      navigate('/dashboard');
+    } catch (error) {
+      toast({
+        title: "Eroare",
+        description: error instanceof Error ? error.message : "Email/username sau parolă incorecte",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -109,21 +100,35 @@ export const AuthDialog = ({ open, onOpenChange, mode, onModeChange }: AuthDialo
       return;
     }
 
-    setTimeout(() => {
+    try {
+      const requestData = {
+        full_name: registerData.full_name,
+        email: registerData.email,
+        phone: registerData.phone,
+        username: registerData.username,
+        age: parseInt(registerData.age),
+        password: registerData.password,
+        confirmPassword: registerData.confirmPassword
+      };
+
+      const data = await register(requestData);
+      
       toast({
         title: "Cont creat cu succes!",
-        description: "Bine ai venit în Trajecta!"
+        description: `Bine ai venit în Trajecta, ${data.user.full_name}!`
       });
       
-      localStorage.setItem('trajecta_user', JSON.stringify({
-        ...registerData,
-        id: Date.now()
-      }));
-      
-      setIsLoading(false);
       onOpenChange(false);
       navigate('/dashboard');
-    }, 2000);
+    } catch (error) {
+      toast({
+        title: "Eroare",
+        description: error instanceof Error ? error.message : "Nu s-a putut crea contul",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleGoogleAuth = () => {
@@ -146,18 +151,6 @@ export const AuthDialog = ({ open, onOpenChange, mode, onModeChange }: AuthDialo
       onOpenChange(false);
       navigate('/dashboard');
     }, 2000);
-  };
-
-  const fillDemoCredentials = () => {
-    setLoginData({
-      identifier: 'test@gmail.com',
-      password: 'test'
-    });
-    
-    toast({
-      title: "Credențiale demo completate",
-      description: "Apasă 'Conectează-te' pentru a accesa demo-ul"
-    });
   };
 
   return (
@@ -204,7 +197,7 @@ export const AuthDialog = ({ open, onOpenChange, mode, onModeChange }: AuthDialo
                   type="text"
                   value={loginData.identifier}
                   onChange={handleLoginChange}
-                  placeholder="test@gmail.com sau test"
+                  placeholder="ana@exemplu.com sau ana_popescu"
                   required
                   className="mt-1"
                 />
@@ -252,15 +245,6 @@ export const AuthDialog = ({ open, onOpenChange, mode, onModeChange }: AuthDialo
                 ) : (
                   'Conectează-te'
                 )}
-              </Button>
-
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full"
-                onClick={fillDemoCredentials}
-              >
-                Completează credențiale demo
               </Button>
 
               <div className="text-center">
@@ -438,14 +422,6 @@ export const AuthDialog = ({ open, onOpenChange, mode, onModeChange }: AuthDialo
                 </p>
               </div>
             </form>
-          )}
-
-          {mode === 'login' && (
-            <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-              <h4 className="font-semibold text-blue-900 mb-2">Demo Credentials</h4>
-              <p className="text-sm text-blue-800 mb-1">Email: test@gmail.com</p>
-              <p className="text-sm text-blue-800">Parola: test</p>
-            </div>
           )}
         </div>
       </DialogContent>

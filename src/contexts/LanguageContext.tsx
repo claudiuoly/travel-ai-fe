@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 export type Language = 'ro' | 'en' | 'es' | 'fr' | 'de' | 'it' | 'pt' | 'nl' | 'pl' | 'cs' | 'hu' | 'hr' | 'bg' | 'el' | 'ru' | 'uk' | 'ar' | 'tr' | 'hi' | 'zh' | 'ja' | 'ko';
@@ -73,9 +72,10 @@ const getTranslations = () => ({
     'hero.users': '1000+ utilizatori',
     'hero.destinations': '500+ destinații',
     'hero.rating': '4.9/5 rating',
-    'hero.cta': 'Începe Aventura',
+    'hero.start_planning': 'Începe Planificarea',
     
     // Travel paths
+    'paths.title': 'O experiență unică pentru fiecare client în parte',
     'paths.gamer': 'Gamer Path',
     'paths.explorer': 'Explorer Path',
     'paths.beginner': 'Beginner Path',
@@ -112,6 +112,8 @@ const getTranslations = () => ({
     'pricing.enterprise.tagline': 'Pentru agenții mari',
     'pricing.choose': 'Alege',
     'pricing.start': 'Începe Gratuit',
+    'pricing.demo': 'Încearcă varianta demo',
+    'pricing.contact': 'Contactează-ne',
     'pricing.details': 'Detalii',
     
     // Pricing features
@@ -170,9 +172,10 @@ const getTranslations = () => ({
     'hero.users': '1000+ users',
     'hero.destinations': '500+ destinations',
     'hero.rating': '4.9/5 rating',
-    'hero.cta': 'Start Adventure',
+    'hero.start_planning': 'Start Planning',
     
     // Travel paths
+    'paths.title': 'A unique experience for each client',
     'paths.gamer': 'Gamer Path',
     'paths.explorer': 'Explorer Path',
     'paths.beginner': 'Beginner Path',
@@ -209,6 +212,8 @@ const getTranslations = () => ({
     'pricing.enterprise.tagline': 'For large agencies',
     'pricing.choose': 'Choose',
     'pricing.start': 'Start Free',
+    'pricing.demo': 'Try the demo version',
+    'pricing.contact': 'Contact us',
     'pricing.details': 'Details',
     
     // Pricing features
@@ -267,9 +272,10 @@ const getTranslations = () => ({
     'hero.users': '1000+ usuarios',
     'hero.destinations': '500+ destinos',
     'hero.rating': '4.9/5 calificación',
-    'hero.cta': 'Comenzar Aventura',
+    'hero.start_planning': 'Comenzar Planificación',
     
     // Travel paths
+    'paths.title': 'Una experiencia única para cada cliente',
     'paths.gamer': 'Ruta Gamer',
     'paths.explorer': 'Ruta Explorador',
     'paths.beginner': 'Ruta Principiante',
@@ -306,6 +312,8 @@ const getTranslations = () => ({
     'pricing.enterprise.tagline': 'Para agencias grandes',
     'pricing.choose': 'Elegir',
     'pricing.start': 'Comenzar Gratis',
+    'pricing.demo': 'Prueba la versión de demostración',
+    'pricing.contact': 'Contáctanos',
     'pricing.details': 'Detalles',
     
     // Pricing features
@@ -364,9 +372,10 @@ const getTranslations = () => ({
     'hero.users': '1000+ utilisateurs',
     'hero.destinations': '500+ destinations',
     'hero.rating': '4.9/5 évaluation',
-    'hero.cta': 'Commencer l\'Aventure',
+    'hero.start_planning': 'Commencer la Planification',
     
     // Travel paths
+    'paths.title': 'Une expérience unique pour chaque client',
     'paths.gamer': 'Parcours Gamer',
     'paths.explorer': 'Parcours Explorateur',
     'paths.beginner': 'Parcours Débutant',
@@ -403,6 +412,8 @@ const getTranslations = () => ({
     'pricing.enterprise.tagline': 'Pour les grandes agences',
     'pricing.choose': 'Choisir',
     'pricing.start': 'Commencer Gratuitement',
+    'pricing.demo': 'Essayer la version démo',
+    'pricing.contact': 'Nous contacter',
     'pricing.details': 'Détails',
     
     // Pricing features
@@ -461,9 +472,10 @@ const getTranslations = () => ({
     'hero.users': '1000+ Nutzer',
     'hero.destinations': '500+ Reiseziele',
     'hero.rating': '4.9/5 Bewertung',
-    'hero.cta': 'Abenteuer Starten',
+    'hero.start_planning': 'Abenteuer Starten',
     
     // Travel paths
+    'paths.title': 'Eine einzigartige Erfahrung für jeden Kunden',
     'paths.gamer': 'Gamer-Pfad',
     'paths.explorer': 'Entdecker-Pfad',
     'paths.beginner': 'Anfänger-Pfad',
@@ -500,6 +512,8 @@ const getTranslations = () => ({
     'pricing.enterprise.tagline': 'Für große Agenturen',
     'pricing.choose': 'Wählen',
     'pricing.start': 'Kostenlos Starten',
+    'pricing.demo': 'Demoversion ausprobieren',
+    'pricing.contact': 'Kontakt aufnehmen',
     'pricing.details': 'Details',
     
     // Pricing features
@@ -558,9 +572,10 @@ const getTranslations = () => ({
     'hero.users': '1000+ utenti',
     'hero.destinations': '500+ destinazioni',
     'hero.rating': '4.9/5 valutazione',
-    'hero.cta': 'Inizia l\'Avventura',
+    'hero.start_planning': 'Inizia l\'Avventura',
     
     // Travel paths
+    'paths.title': 'Un\'esperienza unica per ogni cliente',
     'paths.gamer': 'Percorso Gamer',
     'paths.explorer': 'Percorso Esploratore',
     'paths.beginner': 'Percorso Principiante',
@@ -597,6 +612,8 @@ const getTranslations = () => ({
     'pricing.enterprise.tagline': 'Per agenzie grandi',
     'pricing.choose': 'Scegli',
     'pricing.start': 'Inizia Gratis',
+    'pricing.demo': 'Prova la versione demo',
+    'pricing.contact': 'Contattaci',
     'pricing.details': 'Dettagli',
     
     // Pricing features
@@ -655,9 +672,10 @@ const getTranslations = () => ({
     'hero.users': '1000+ usuários',
     'hero.destinations': '500+ destinos',
     'hero.rating': '4.9/5 avaliação',
-    'hero.cta': 'Começar Aventura',
+    'hero.start_planning': 'Começar Aventura',
     
     // Travel paths
+    'paths.title': 'Uma experiência única para cada cliente',
     'paths.gamer': 'Caminho Gamer',
     'paths.explorer': 'Caminho Explorador',
     'paths.beginner': 'Caminho Iniciante',
@@ -694,6 +712,8 @@ const getTranslations = () => ({
     'pricing.enterprise.tagline': 'Para agências grandes',
     'pricing.choose': 'Escolher',
     'pricing.start': 'Começar Grátis',
+    'pricing.demo': 'Experimente a versão demo',
+    'pricing.contact': 'Contate-nos',
     'pricing.details': 'Detalhes',
     
     // Pricing features
@@ -752,9 +772,10 @@ const getTranslations = () => ({
     'hero.users': '1000+ gebruikers',
     'hero.destinations': '500+ bestemmingen',
     'hero.rating': '4.9/5 beoordeling',
-    'hero.cta': 'Begin Avontuur',
+    'hero.start_planning': 'Begin Avontuur',
     
     // Travel paths
+    'paths.title': 'Een unieke ervaring voor elke klant apart',
     'paths.gamer': 'Gamer Pad',
     'paths.explorer': 'Ontdekkingsreiziger Pad',
     'paths.beginner': 'Beginner Pad',
@@ -791,6 +812,8 @@ const getTranslations = () => ({
     'pricing.enterprise.tagline': 'Voor grote bureaus',
     'pricing.choose': 'Kiezen',
     'pricing.start': 'Gratis Beginnen',
+    'pricing.demo': 'Probeer de demoversie',
+    'pricing.contact': 'Neem contact op',
     'pricing.details': 'Details',
     
     // Pricing features
@@ -849,9 +872,10 @@ const getTranslations = () => ({
     'hero.users': '1000+ użytkowników',
     'hero.destinations': '500+ miejsc',
     'hero.rating': '4.9/5 ocena',
-    'hero.cta': 'Rozpocznij Przygodę',
+    'hero.start_planning': 'Rozpocznij Przygodę',
     
     // Travel paths
+    'paths.title': 'Unikalna doświadczenie dla każdego klienta',
     'paths.gamer': 'Ścieżka Gracza',
     'paths.explorer': 'Ścieżka Odkrywcy',
     'paths.beginner': 'Ścieżka Początkującego',
@@ -888,6 +912,8 @@ const getTranslations = () => ({
     'pricing.enterprise.tagline': 'Dla dużych agencji',
     'pricing.choose': 'Wybierz',
     'pricing.start': 'Zacznij Za Darmo',
+    'pricing.demo': 'Wypróbuj wersję demonstracyjną',
+    'pricing.contact': 'Skontaktuj się',
     'pricing.details': 'Szczegóły',
     
     // Pricing features
@@ -946,9 +972,10 @@ const getTranslations = () => ({
     'hero.users': '1000+ uživatelů',
     'hero.destinations': '500+ destinací',
     'hero.rating': '4.9/5 hodnocení',
-    'hero.cta': 'Začít Dobrodružství',
+    'hero.start_planning': 'Začít Dobrodružství',
     
     // Travel paths
+    'paths.title': 'Jedinečné zkušení pro každého klienta',
     'paths.gamer': 'Hráčská Cesta',
     'paths.explorer': 'Průzkumná Cesta',
     'paths.beginner': 'Začátečnická Cesta',
@@ -985,6 +1012,8 @@ const getTranslations = () => ({
     'pricing.enterprise.tagline': 'Pro velké agentury',
     'pricing.choose': 'Vybrat',
     'pricing.start': 'Začít Zdarma',
+    'pricing.demo': 'Vyzkoušet zdarma',
+    'pricing.contact': 'Kontaktujte nás',
     'pricing.details': 'Detaily',
     
     // Pricing features
@@ -1043,9 +1072,10 @@ const getTranslations = () => ({
     'hero.users': '1000+ felhasználó',
     'hero.destinations': '500+ úti cél',
     'hero.rating': '4.9/5 értékelés',
-    'hero.cta': 'Kaland Kezdése',
+    'hero.start_planning': 'Kaland Kezdése',
     
     // Travel paths
+    'paths.title': 'Egyedi utazási élmény minden ügyfél számára',
     'paths.gamer': 'Gamer Útvonal',
     'paths.explorer': 'Felfedező Útvonal',
     'paths.beginner': 'Kezdő Útvonal',
@@ -1082,6 +1112,8 @@ const getTranslations = () => ({
     'pricing.enterprise.tagline': 'Nagy ügynökségeknek',
     'pricing.choose': 'Választás',
     'pricing.start': 'Ingyenes Kezdés',
+    'pricing.demo': 'Próbáld ki a demoverziót',
+    'pricing.contact': 'Kapcsolat',
     'pricing.details': 'Részletek',
     
     // Pricing features
@@ -1140,13 +1172,14 @@ const getTranslations = () => ({
     'hero.users': '1000+ korisnika',
     'hero.destinations': '500+ odredišta',
     'hero.rating': '4.9/5 ocjena',
-    'hero.cta': 'Započni Avanturu',
+    'hero.start_planning': 'Započni Avanturu',
     
     // Travel paths
+    'paths.title': 'Jedinstveno putovanje za svakog klijenta',
     'paths.gamer': 'Gejmerski Put',
     'paths.explorer': 'Istraživački Put',
-    'paths.beginner': 'Početni Put',
-    'paths.senior': 'Seniorski Put',
+    'paths.beginner': 'Kezdő Útvonal',
+    'paths.senior': 'Senior Útvonal',
     'paths.choose': 'Odaberite svoju savršenu avanturu',
     
     // Benefits section
@@ -1179,6 +1212,8 @@ const getTranslations = () => ({
     'pricing.enterprise.tagline': 'Za velike agencije',
     'pricing.choose': 'Odaberi',
     'pricing.start': 'Počni Besplatno',
+    'pricing.demo': 'Iskusni probni period',
+    'pricing.contact': 'Kontaktirajte nas',
     'pricing.details': 'Detalji',
     
     // Pricing features
@@ -1211,7 +1246,7 @@ const getTranslations = () => ({
     'testimonials.elena.role': 'Putni savjetnik u Premium Tours',
     
     // CTA section
-    'cta.title': 'Spremni dati svojim klijentima vlastitog AI agenta?',
+    'cta.title': 'Spremni dati svojim klijentima vlastitog AI-agenta?',
     'cta.subtitle': 'Počnite svoj besplatni probni period danas i vidite kako Trajecta transformira putničko iskustvo',
     'cta.button': 'Počni Besplatni Probni Period - 14 Dana',
     
@@ -1237,9 +1272,10 @@ const getTranslations = () => ({
     'hero.users': '1000+ потребители',
     'hero.destinations': '500+ дестинации',
     'hero.rating': '4.9/5 оценка',
-    'hero.cta': 'Започни Приключението',
+    'hero.start_planning': 'Започни Приключението',
     
     // Travel paths
+    'paths.title': 'Уникално пътуване за всеки клиент поотделно',
     'paths.gamer': 'Геймърски Път',
     'paths.explorer': 'Изследователски Път',
     'paths.beginner': 'Начинаещ Път',
@@ -1276,6 +1312,8 @@ const getTranslations = () => ({
     'pricing.enterprise.tagline': 'За големи агенции',
     'pricing.choose': 'Избери',
     'pricing.start': 'Започни Безплатно',
+    'pricing.demo': 'Пробвайте демоверсията',
+    'pricing.contact': 'Свържете се с нас',
     'pricing.details': 'Детайли',
     
     // Pricing features
@@ -1334,9 +1372,10 @@ const getTranslations = () => ({
     'hero.users': '1000+ χρήστες',
     'hero.destinations': '500+ προορισμοί',
     'hero.rating': '4.9/5 αξιολόγηση',
-    'hero.cta': 'Ξεκινήστε την Περιπέτεια',
+    'hero.start_planning': 'Ξεκινήστε την Περιπέτεια',
     
     // Travel paths
+    'paths.title': 'Εξατομικευμένη Εμπειρία για κάθε πελάτη',
     'paths.gamer': 'Μονοπάτι Παίκτη',
     'paths.explorer': 'Μονοπάτι Εξερευνητή',
     'paths.beginner': 'Μονοπάτι Αρχαρίου',
@@ -1373,6 +1412,8 @@ const getTranslations = () => ({
     'pricing.enterprise.tagline': 'Για μεγάλα πρακτορεία',
     'pricing.choose': 'Επιλογή',
     'pricing.start': 'Ξεκινήστε Δωρεάν',
+    'pricing.demo': 'Δοκιμή δωρεάν',
+    'pricing.contact': 'Επικοινωνήστε μαζί μας',
     'pricing.details': 'Λεπτομέρειες',
     
     // Pricing features
@@ -1431,9 +1472,10 @@ const getTranslations = () => ({
     'hero.users': '1000+ пользователей',
     'hero.destinations': '500+ направлений',
     'hero.rating': '4.9/5 рейтинг',
-    'hero.cta': 'Начать Приключение',
+    'hero.start_planning': 'Начать Приключение',
     
     // Travel paths
+    'paths.title': 'Уникальное путешествие для каждого клиента',
     'paths.gamer': 'Путь Геймера',
     'paths.explorer': 'Путь Исследователя',
     'paths.beginner': 'Путь Новичка',
@@ -1470,6 +1512,8 @@ const getTranslations = () => ({
     'pricing.enterprise.tagline': 'Для крупных агентств',
     'pricing.choose': 'Выбрать',
     'pricing.start': 'Начать Бесплатно',
+    'pricing.demo': 'Демоверсия',
+    'pricing.contact': 'Свяжитесь с нами',
     'pricing.details': 'Детали',
     
     // Pricing features
@@ -1528,9 +1572,10 @@ const getTranslations = () => ({
     'hero.users': '1000+ користувачів',
     'hero.destinations': '500+ напрямків',
     'hero.rating': '4.9/5 рейтинг',
-    'hero.cta': 'Почати Пригоду',
+    'hero.start_planning': 'Почати Пригоду',
     
     // Travel paths
+    'paths.title': 'Унікальне поїздження для кожного клієнта',
     'paths.gamer': 'Шлях Геймера',
     'paths.explorer': 'Шлях Дослідника',
     'paths.beginner': 'Шлях Новачка',
@@ -1567,6 +1612,8 @@ const getTranslations = () => ({
     'pricing.enterprise.tagline': 'Для великих агентств',
     'pricing.choose': 'Обрати',
     'pricing.start': 'Почати Безкоштовно',
+    'pricing.demo': 'Спробуйте демоверсію',
+    'pricing.contact': 'Зв\'яжіться з нами',
     'pricing.details': 'Деталі',
     
     // Pricing features
@@ -1625,9 +1672,10 @@ const getTranslations = () => ({
     'hero.users': '1000+ مستخدم',
     'hero.destinations': '500+ وجهة',
     'hero.rating': '4.9/5 تقييم',
-    'hero.cta': 'ابدأ المغامرة',
+    'hero.start_planning': 'ابدأ المغامرة',
     
     // Travel paths
+    'paths.title': 'تجربة شخصية فريدة لكل عميل',
     'paths.gamer': 'مسار اللاعب',
     'paths.explorer': 'مسار المستكشف',
     'paths.beginner': 'مسار المبتدئ',
@@ -1664,6 +1712,8 @@ const getTranslations = () => ({
     'pricing.enterprise.tagline': 'للوكالات الكبيرة',
     'pricing.choose': 'اختيار',
     'pricing.start': 'ابدأ مجانًا',
+    'pricing.demo': 'تجربة جيدة',
+    'pricing.contact': 'تواصل معنا',
     'pricing.details': 'التفاصيل',
     
     // Pricing features
@@ -1722,9 +1772,10 @@ const getTranslations = () => ({
     'hero.users': '1000+ kullanıcı',
     'hero.destinations': '500+ destinasyon',
     'hero.rating': '4.9/5 değerlendirme',
-    'hero.cta': 'Macerayı Başlat',
+    'hero.start_planning': 'Macerayı Başlat',
     
     // Travel paths
+    'paths.title': 'Kişiselleştirilmiş Macera Yolu',
     'paths.gamer': 'Oyuncu Yolu',
     'paths.explorer': 'Kaşif Yolu',
     'paths.beginner': 'Başlangıç Yolu',
@@ -1761,6 +1812,8 @@ const getTranslations = () => ({
     'pricing.enterprise.tagline': 'Büyük acenteler için',
     'pricing.choose': 'Seç',
     'pricing.start': 'Ücretsiz Başla',
+    'pricing.demo': 'Demo deneyin',
+    'pricing.contact': 'Destek',
     'pricing.details': 'Detaylar',
     
     // Pricing features
@@ -1819,9 +1872,10 @@ const getTranslations = () => ({
     'hero.users': '1000+ उपयोगकर्ता',
     'hero.destinations': '500+ गंतव्य',
     'hero.rating': '4.9/5 रेटिंग',
-    'hero.cta': 'एडवेंचर शुरू करें',
+    'hero.start_planning': 'एडवेंचर शुरू करें',
     
     // Travel paths
+    'paths.title': 'व्यक्तिगत यात्रा के लिए एक अनोखी अनुभव',
     'paths.gamer': 'गेमर पथ',
     'paths.explorer': 'एक्सप्लोरर पथ',
     'paths.beginner': 'शुरुआती पथ',
@@ -1858,6 +1912,8 @@ const getTranslations = () => ({
     'pricing.enterprise.tagline': 'बड़ी एजेंसियों के लिए',
     'pricing.choose': 'चुनें',
     'pricing.start': 'मुफ्त शुरू करें',
+    'pricing.demo': 'डेमो वर्जन',
+    'pricing.contact': 'संपर्क करें',
     'pricing.details': 'विवरण',
     
     // Pricing features
@@ -1916,9 +1972,10 @@ const getTranslations = () => ({
     'hero.users': '1000+用户',
     'hero.destinations': '500+目的地',
     'hero.rating': '4.9/5评分',
-    'hero.cta': '开始冒险',
+    'hero.start_planning': '开始冒险',
     
     // Travel paths
+    'paths.title': '个性化旅行体验',
     'paths.gamer': '游戏玩家路径',
     'paths.explorer': '探险家路径',
     'paths.beginner': '初学者路径',
@@ -1955,6 +2012,8 @@ const getTranslations = () => ({
     'pricing.enterprise.tagline': '适用于大型代理',
     'pricing.choose': '选择',
     'pricing.start': '免费开始',
+    'pricing.demo': '试用版',
+    'pricing.contact': '联系我们',
     'pricing.details': '详情',
     
     // Pricing features
@@ -2013,9 +2072,10 @@ const getTranslations = () => ({
     'hero.users': '1000+ユーザー',
     'hero.destinations': '500+目的地',
     'hero.rating': '4.9/5評価',
-    'hero.cta': '冒険を始める',
+    'hero.start_planning': '冒険を始める',
     
     // Travel paths
+    'paths.title': '独自のパーソナルAIエージェントを持っている',
     'paths.gamer': 'ゲーマーパス',
     'paths.explorer': 'エクスプローラーパス',
     'paths.beginner': '初心者パス',
@@ -2052,6 +2112,8 @@ const getTranslations = () => ({
     'pricing.enterprise.tagline': '大きな代理店向け',
     'pricing.choose': '選択',
     'pricing.start': '無料で始める',
+    'pricing.demo': 'デモ版',
+    'pricing.contact': 'お問い合わせ',
     'pricing.details': '詳細',
     
     // Pricing features
@@ -2110,9 +2172,10 @@ const getTranslations = () => ({
     'hero.users': '1000+사용자',
     'hero.destinations': '500+목적지',
     'hero.rating': '4.9/5평점',
-    'hero.cta': '모험 시작하기',
+    'hero.start_planning': '모험 시작하기',
     
     // Travel paths
+    'paths.title': '개인화된 여행을 위한 고유한 경험',
     'paths.gamer': '게이머 경로',
     'paths.explorer': '탐험가 경로',
     'paths.beginner': '초심자 경로',
@@ -2149,6 +2212,8 @@ const getTranslations = () => ({
     'pricing.enterprise.tagline': '대형 여행사용',
     'pricing.choose': '선택',
     'pricing.start': '무료로 시작',
+    'pricing.demo': '데모 버전',
+    'pricing.contact': '연락처',
     'pricing.details': '세부사항',
     
     // Pricing features

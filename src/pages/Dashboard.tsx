@@ -1,11 +1,13 @@
-
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { useNavigate } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
-import { Send, Mic, MicOff, MapPin, Calendar, Clock, LogOut, Menu } from 'lucide-react';
+import { Send, Mic, MicOff, LogOut, MapPin, Calendar, DollarSign, Users, Plane } from 'lucide-react';
+import { getUser, logout, isAuthenticated } from '@/lib/auth';
 
 interface Message {
   id: number;
@@ -18,72 +20,28 @@ interface Message {
 const Dashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [user, setUser] = useState<any>(null);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: 1,
+      text: "Bună! Sunt asistentul tău AI pentru planificarea călătoriilor. Cum te pot ajuta astăzi?",
+      isUser: false,
+      timestamp: new Date()
+    }
+  ]);
   const [inputMessage, setInputMessage] = useState('');
-  const [isListening, setIsListening] = useState(false);
-  const [isTyping, setIsTyping] = useState(false);
-  const [currentStep, setCurrentStep] = useState(0);
+  const [isVoiceActive, setIsVoiceActive] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  const aiResponses = [
-    "Bună! Sunt Sofia, asistentul tău AI pentru planificarea călătoriilor. Să începem cu ceva simplu - unde ai vrea să călătorești?",
-    "Excelentă alegere! {destination} este o destinație minunată. Ce tip de vacanță îți dorești - aventură, relaxare, cultură sau poate o combinație?",
-    "Perfect! Pentru o vacanță de {type}, am câteva sugestii grozave. Care este bugetul tău aproximativ pentru această călătorie?",
-    "Înțeleg, buget de {budget}. Acum să vorbim despre durata - câte zile plănuiești să petreci în {destination}?",
-    "Minunat! {days} zile sunt suficiente pentru o experiență memorabilă. Îmi permiti să îți creez un itinerar personalizat?",
-  ];
-
-  const predefinedItinerary = {
-    destination: "Barcelona",
-    days: 5,
-    budget: "€1500",
-    type: "cultură și relaxare",
-    schedule: [
-      {
-        day: 1,
-        date: "Luni, 15 Ianuarie",
-        activities: [
-          { time: "09:00", activity: "Check-in Hotel Casa Fuster", location: "Gràcia", type: "hotel" },
-          { time: "11:00", activity: "Plimbare prin Park Güell", location: "Gràcia", type: "attraction" },
-          { time: "14:00", activity: "Prânz la Can Vallés", location: "Gràcia", type: "restaurant" },
-          { time: "16:00", activity: "Explorare Sagrada Família", location: "Eixample", type: "attraction" },
-          { time: "19:00", activity: "Cină la Disfrutar", location: "Eixample", type: "restaurant" }
-        ]
-      },
-      {
-        day: 2,
-        date: "Marți, 16 Ianuarie",
-        activities: [
-          { time: "10:00", activity: "Vizită Muzeu Picasso", location: "El Born", type: "museum" },
-          { time: "13:00", activity: "Prânz la El Xampanyet", location: "El Born", type: "restaurant" },
-          { time: "15:00", activity: "Plimbare prin Barrio Gótico", location: "Ciutat Vella", type: "walking" },
-          { time: "17:00", activity: "Catedralei Barcelona", location: "Ciutat Vella", type: "attraction" },
-          { time: "20:00", activity: "Cină la Can Culleretes", location: "Ciutat Vella", type: "restaurant" }
-        ]
-      }
-    ]
-  };
+  const user = getUser();
 
   useEffect(() => {
-    const userData = localStorage.getItem('trajecta_user');
-    if (!userData) {
+    // Check if user is authenticated
+    if (!isAuthenticated()) {
       navigate('/login');
       return;
     }
-    
-    const parsedUser = JSON.parse(userData);
-    setUser(parsedUser);
-    
-    // Add initial AI message
-    setTimeout(() => {
-      addMessage(aiResponses[0], false);
-    }, 1000);
-  }, [navigate]);
 
-  useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, navigate]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -103,285 +61,267 @@ const Dashboard = () => {
   const handleSendMessage = () => {
     if (!inputMessage.trim()) return;
 
-    const userMessage = inputMessage;
-    addMessage(userMessage, true);
-    setInputMessage('');
-    setIsTyping(true);
-
-    // Simulate AI processing
+    addMessage(inputMessage, true);
+    
+    // Simulate AI response
     setTimeout(() => {
-      setIsTyping(false);
-      handleAIResponse(userMessage);
-    }, 1500);
+      handleAIResponse(inputMessage);
+    }, 1000);
+
+    setInputMessage('');
   };
 
   const handleAIResponse = (userMessage: string) => {
-    const nextStep = currentStep + 1;
-    
-    if (nextStep < aiResponses.length) {
-      let response = aiResponses[nextStep];
+    const destination = extractDestination(userMessage);
+    const type = extractType(userMessage);
+    const budget = extractBudget(userMessage);
+    const days = extractDays(userMessage);
+
+    if (destination || type || budget || days) {
+      const response = `Excelent! Am înțeles că vrei să vizitezi ${destination || 'o destinație'} pentru ${type || 'o călătorie'}${budget ? ` cu un buget de ${budget}` : ''}${days ? ` pentru ${days} zile` : ''}. Îți voi pregăti câteva sugestii personalizate!`;
       
-      // Replace placeholders with user data
-      response = response.replace('{destination}', extractDestination(userMessage) || 'Barcelona');
-      response = response.replace('{type}', extractType(userMessage) || 'cultură');
-      response = response.replace('{budget}', extractBudget(userMessage) || '€1500');
-      response = response.replace('{days}', extractDays(userMessage) || '5');
-      
-      addMessage(response, false);
-      setCurrentStep(nextStep);
+      addMessage(response, false, {
+        destination,
+        type,
+        budget,
+        days,
+        suggestions: [
+          { name: "Hotel Central Plaza", type: "Cazare", rating: 4.5, price: "150€/noapte" },
+          { name: "Tur ghidat în centrul istoric", type: "Activitate", rating: 4.8, price: "25€/persoană" },
+          { name: "Restaurant La Piazza", type: "Restaurant", rating: 4.6, price: "30€/persoană" }
+        ]
+      });
     } else {
-      // Generate final itinerary
-      addMessage("Perfect! Am creat itinerariul tău personalizat pentru Barcelona. Iată programul detaliat:", false);
+      const responses = [
+        "Îmi poți spune unde ai vrea să călătorești?",
+        "Ce tip de călătorie preferi? Relaxare, aventură, cultură?",
+        "Care este bugetul tău aproximativ pentru această călătorie?",
+        "Pentru câte zile plănuiești să călătorești?"
+      ];
       
-      setTimeout(() => {
-        addMessage("", false, predefinedItinerary);
-      }, 1000);
+      const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+      addMessage(randomResponse, false);
     }
   };
 
   const extractDestination = (message: string): string | null => {
-    const destinations = ['barcelona', 'paris', 'roma', 'amsterdam', 'praga', 'viena', 'londra'];
-    const found = destinations.find(dest => message.toLowerCase().includes(dest));
-    return found ? found.charAt(0).toUpperCase() + found.slice(1) : null;
+    const destinations = ['Paris', 'Roma', 'Barcelona', 'Amsterdam', 'Praga', 'Viena', 'Budapesta'];
+    return destinations.find(dest => message.toLowerCase().includes(dest.toLowerCase())) || null;
   };
 
   const extractType = (message: string): string | null => {
-    if (message.toLowerCase().includes('aventur')) return 'aventură';
-    if (message.toLowerCase().includes('relaxar') || message.toLowerCase().includes('odihn')) return 'relaxare';
-    if (message.toLowerCase().includes('cultur')) return 'cultură';
+    if (message.toLowerCase().includes('relaxare')) return 'relaxare';
+    if (message.toLowerCase().includes('aventură')) return 'aventură';
+    if (message.toLowerCase().includes('cultură')) return 'cultură';
     return null;
   };
 
   const extractBudget = (message: string): string | null => {
-    const budgetMatch = message.match(/(\d+)/);
-    return budgetMatch ? `€${budgetMatch[1]}` : null;
+    const budgetMatch = message.match(/(\d+)\s*(euro|eur|€)/i);
+    return budgetMatch ? `${budgetMatch[1]}€` : null;
   };
 
   const extractDays = (message: string): string | null => {
-    const daysMatch = message.match(/(\d+)/);
+    const daysMatch = message.match(/(\d+)\s*(zile|zi)/i);
     return daysMatch ? daysMatch[1] : null;
   };
 
   const toggleVoice = () => {
-    setIsListening(!isListening);
-    if (!isListening) {
+    setIsVoiceActive(!isVoiceActive);
+    if (!isVoiceActive) {
       toast({
-        title: "Voice Chat Active",
-        description: "Poți vorbi acum cu Sofia!"
+        title: "Funcție în dezvoltare",
+        description: "Recunoașterea vocală va fi disponibilă în curând!"
       });
     }
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('trajecta_user');
+    logout();
+    toast({
+      title: "Deconectare reușită",
+      description: "La revedere!"
+    });
     navigate('/');
   };
 
   if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
-      </div>
-    );
+    return null; // This shouldn't happen due to the useEffect check, but just in case
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
+            <div className="flex items-center space-x-4">
               <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 Trajecta
               </h1>
-              <div className="ml-4 text-sm text-gray-600">
-                Bună, {user.full_name}!
-              </div>
+              <Badge variant="secondary" className="hidden sm:inline-flex">
+                AI Assistant
+              </Badge>
             </div>
-            <div className="flex items-center gap-4">
-              <Button
-                variant="ghost"
-                onClick={() => navigate('/map')}
-                className="text-blue-600"
-              >
-                <MapPin className="w-4 h-4 mr-2" />
-                Vezi Harta
-              </Button>
-              <Button variant="ghost" onClick={handleLogout}>
-                <LogOut className="w-4 h-4 mr-2" />
-                Logout
+            
+            <div className="flex items-center space-x-4">
+              <div className="hidden sm:block text-right">
+                <p className="text-sm font-medium text-gray-900">{user.full_name}</p>
+                <p className="text-xs text-gray-500">{user.email}</p>
+              </div>
+              <Avatar>
+                <AvatarFallback className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+                  {user.full_name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <Button variant="ghost" size="sm" onClick={handleLogout}>
+                <LogOut className="w-4 h-4" />
               </Button>
             </div>
           </div>
         </div>
-      </header>
+      </div>
 
-      <div className="max-w-4xl mx-auto p-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Chat Section */}
-          <div className="lg:col-span-2">
-            <Card className="h-[600px] flex flex-col">
-              <div className="p-4 border-b bg-gradient-to-r from-blue-50 to-purple-50">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-                    <span className="text-white font-bold">S</span>
-                  </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Sidebar */}
+          <div className="lg:col-span-1">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Călătoriile tale</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center space-x-3 p-3 bg-blue-50 rounded-lg">
+                  <MapPin className="w-5 h-5 text-blue-600" />
                   <div>
-                    <h3 className="font-semibold">Sofia - AI Travel Assistant</h3>
-                    <p className="text-sm text-gray-600">Online acum</p>
+                    <p className="font-medium text-sm">Paris, Franța</p>
+                    <p className="text-xs text-gray-500">15-20 Mai 2024</p>
                   </div>
                 </div>
-              </div>
+                
+                <div className="flex items-center space-x-3 p-3 bg-purple-50 rounded-lg">
+                  <Calendar className="w-5 h-5 text-purple-600" />
+                  <div>
+                    <p className="font-medium text-sm">Roma, Italia</p>
+                    <p className="text-xs text-gray-500">Planificat</p>
+                  </div>
+                </div>
 
-              <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
-                {messages.map((message) => (
-                  <div key={message.id}>
-                    <div className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}>
-                      <div className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
-                        message.isUser 
-                          ? 'bg-blue-500 text-white' 
-                          : 'bg-gray-100 text-gray-800'
-                      }`}>
-                        {message.text && <p>{message.text}</p>}
-                        
-                        {/* Render itinerary if present */}
-                        {message.data && (
-                          <div className="mt-3 p-3 bg-white rounded-lg shadow-sm">
-                            <h4 className="font-bold text-gray-800 mb-2">
-                              Itinerariul tău pentru {message.data.destination}
-                            </h4>
-                            <div className="text-sm text-gray-600 mb-3">
-                              {message.data.days} zile • {message.data.budget} • {message.data.type}
-                            </div>
-                            
-                            {message.data.schedule.map((day: any) => (
-                              <div key={day.day} className="mb-4 border-l-2 border-blue-200 pl-3">
-                                <h5 className="font-semibold text-gray-800">
-                                  Ziua {day.day} - {day.date}
-                                </h5>
-                                <div className="space-y-2 mt-2">
-                                  {day.activities.map((activity: any, idx: number) => (
-                                    <div key={idx} className="flex items-start gap-2 text-sm">
-                                      <Clock className="w-4 h-4 text-blue-500 mt-0.5" />
-                                      <div>
-                                        <span className="font-medium">{activity.time}</span> - 
-                                        <span className="ml-1">{activity.activity}</span>
-                                        <div className="text-gray-500">{activity.location}</div>
-                                      </div>
-                                    </div>
-                                  ))}
+                <Button className="w-full" variant="outline">
+                  <Plane className="w-4 h-4 mr-2" />
+                  Planifică călătorie nouă
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="mt-6">
+              <CardHeader>
+                <CardTitle className="text-lg">Statistici</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <MapPin className="w-4 h-4 text-blue-600" />
+                    <span className="text-sm">Destinații vizitate</span>
+                  </div>
+                  <span className="font-semibold">12</span>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <DollarSign className="w-4 h-4 text-green-600" />
+                    <span className="text-sm">Economii totale</span>
+                  </div>
+                  <span className="font-semibold">€2,450</span>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <Users className="w-4 h-4 text-purple-600" />
+                    <span className="text-sm">Călătorii în grup</span>
+                  </div>
+                  <span className="font-semibold">8</span>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Chat Area */}
+          <div className="lg:col-span-3">
+            <Card className="h-[600px] flex flex-col">
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <span>Asistent AI pentru Călătorii</span>
+                  <Badge variant="outline" className="text-green-600 border-green-600">
+                    Online
+                  </Badge>
+                </CardTitle>
+              </CardHeader>
+              
+              <CardContent className="flex-1 flex flex-col">
+                {/* Messages */}
+                <div className="flex-1 overflow-y-auto space-y-4 mb-4">
+                  {messages.map((message) => (
+                    <div
+                      key={message.id}
+                      className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
+                    >
+                      <div
+                        className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
+                          message.isUser
+                            ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
+                            : 'bg-gray-100 text-gray-900'
+                        }`}
+                      >
+                        <p className="text-sm">{message.text}</p>
+                        {message.data?.suggestions && (
+                          <div className="mt-3 space-y-2">
+                            {message.data.suggestions.map((suggestion: any, index: number) => (
+                              <div key={index} className="bg-white/20 p-2 rounded text-xs">
+                                <div className="flex justify-between items-center">
+                                  <span className="font-medium">{suggestion.name}</span>
+                                  <span className="text-yellow-300">★ {suggestion.rating}</span>
+                                </div>
+                                <div className="flex justify-between mt-1">
+                                  <span>{suggestion.type}</span>
+                                  <span className="font-medium">{suggestion.price}</span>
                                 </div>
                               </div>
                             ))}
-                            
-                            <Button 
-                              className="w-full mt-3 bg-gradient-to-r from-blue-500 to-purple-500"
-                              onClick={() => navigate('/map')}
-                            >
-                              Vezi pe hartă
-                            </Button>
                           </div>
                         )}
+                        <p className="text-xs opacity-70 mt-1">
+                          {message.timestamp.toLocaleTimeString('ro-RO', { 
+                            hour: '2-digit', 
+                            minute: '2-digit' 
+                          })}
+                        </p>
                       </div>
                     </div>
-                    <div className={`text-xs text-gray-500 mt-1 ${message.isUser ? 'text-right' : 'text-left'}`}>
-                      {message.timestamp.toLocaleTimeString('ro-RO', { 
-                        hour: '2-digit', 
-                        minute: '2-digit' 
-                      })}
-                    </div>
-                  </div>
-                ))}
-                
-                {isTyping && (
-                  <div className="flex justify-start">
-                    <div className="bg-gray-100 px-4 py-2 rounded-lg">
-                      <div className="flex space-x-1">
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                
-                <div ref={messagesEndRef} />
-              </CardContent>
+                  ))}
+                  <div ref={messagesEndRef} />
+                </div>
 
-              <div className="p-4 border-t">
-                <div className="flex gap-2">
+                {/* Input */}
+                <div className="flex space-x-2">
                   <Input
                     value={inputMessage}
                     onChange={(e) => setInputMessage(e.target.value)}
-                    placeholder="Scrie mesajul tău aici..."
+                    placeholder="Întreabă-mă orice despre călătoria ta..."
                     onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                     className="flex-1"
                   />
                   <Button
                     onClick={toggleVoice}
-                    variant={isListening ? "default" : "outline"}
+                    variant={isVoiceActive ? "default" : "outline"}
                     size="icon"
-                    className={isListening ? "bg-red-500 hover:bg-red-600" : ""}
                   >
-                    {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                    {isVoiceActive ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
                   </Button>
                   <Button onClick={handleSendMessage} size="icon">
                     <Send className="w-4 h-4" />
                   </Button>
                 </div>
-              </div>
-            </Card>
-          </div>
-
-          {/* Sidebar */}
-          <div className="space-y-6">
-            <Card>
-              <CardContent className="p-4">
-                <h3 className="font-semibold mb-3">Călătoriile tale</h3>
-                <div className="space-y-2 text-sm text-gray-600">
-                  <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4" />
-                    <span>Ultima călătorie: Niciuna</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4" />
-                    <span>Destinații vizitate: 0</span>
-                  </div>
-                </div>
-                <Button variant="outline" className="w-full mt-3">
-                  Istoricul călătoriilor
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-4">
-                <h3 className="font-semibold mb-3">Sugestii rapide</h3>
-                <div className="space-y-2">
-                  {['Barcelona', 'Paris', 'Roma', 'Amsterdam'].map((city) => (
-                    <Button
-                      key={city}
-                      variant="ghost"
-                      className="w-full justify-start text-sm"
-                      onClick={() => {
-                        setInputMessage(`Vreau să merg în ${city}`);
-                      }}
-                    >
-                      <MapPin className="w-4 h-4 mr-2" />
-                      {city}
-                    </Button>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-gradient-to-br from-blue-50 to-purple-50">
-              <CardContent className="p-4">
-                <h3 className="font-semibold mb-2">💡 Sfat AI</h3>
-                <p className="text-sm text-gray-700">
-                  Fii cât mai specific cu preferințele tale pentru cele mai bune recomandări!
-                </p>
               </CardContent>
             </Card>
           </div>

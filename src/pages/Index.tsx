@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -172,7 +171,8 @@ const Index = () => {
       <section className="relative z-10 pt-20 pb-32">
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="text-white">
+            {/* Left side - Main content with slide-in from left animation */}
+            <div className="text-white animate-slide-in-left">
               <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
                 <Star className="w-4 h-4 text-yellow-400" />
                 <span className="text-sm">{t('hero.badge')}</span>
@@ -204,36 +204,44 @@ const Index = () => {
               <Button 
                 size="lg" 
                 onClick={() => setAuthDialog('register')}
-                className="bg-orange-500 hover:bg-orange-600 text-white text-lg px-8 py-4 rounded-xl animate-pulse-slow"
+                className="bg-orange-500 hover:bg-orange-600 text-white text-lg px-8 py-4 rounded-xl animate-pulse-slow hover:scale-105 transition-transform duration-300"
               >
-                {t('hero.cta')}
+                {t('hero.start_planning')}
               </Button>
             </div>
 
-            {/* Right side - Interactive Travel Paths */}
-            <div className="relative">
-              <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20">
+            {/* Right side - Interactive Travel Paths with slide-in from right animation */}
+            <div className="relative animate-slide-in-right">
+              <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 hover:bg-white/15 transition-all duration-500 path-card-float">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-                  <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
-                  <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                  <div className="w-3 h-3 bg-red-400 rounded-full animate-pulse"></div>
+                  <div className="w-3 h-3 bg-yellow-400 rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></div>
+                  <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></div>
+                </div>
+
+                {/* New title for the paths card */}
+                <div className="text-center mb-6">
+                  <h3 className="text-white text-lg font-semibold mb-2">
+                    {t('paths.title')}
+                  </h3>
+                  <div className="w-16 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 mx-auto rounded-full"></div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-gradient-to-br from-yellow-400/20 to-orange-500/20 p-4 rounded-xl border border-yellow-400/30">
-                    <div className="text-2xl mb-2">🎮</div>
+                  <div className="bg-gradient-to-br from-yellow-400/20 to-orange-500/20 p-4 rounded-xl border border-yellow-400/30 hover:scale-105 transition-transform duration-300 cursor-pointer group path-item-tilt">
+                    <div className="text-2xl mb-2 group-hover:scale-110 transition-transform duration-300">🎮</div>
                     <div className="text-white font-medium">{t('paths.gamer')}</div>
                   </div>
-                  <div className="bg-gradient-to-br from-blue-400/20 to-purple-500/20 p-4 rounded-xl border border-blue-400/30">
-                    <div className="text-2xl mb-2">🗺️</div>
+                  <div className="bg-gradient-to-br from-blue-400/20 to-purple-500/20 p-4 rounded-xl border border-blue-400/30 hover:scale-105 transition-transform duration-300 cursor-pointer group path-item-tilt">
+                    <div className="text-2xl mb-2 group-hover:scale-110 transition-transform duration-300">🗺️</div>
                     <div className="text-white font-medium">{t('paths.explorer')}</div>
                   </div>
-                  <div className="bg-gradient-to-br from-green-400/20 to-blue-500/20 p-4 rounded-xl border border-green-400/30">
-                    <div className="text-2xl mb-2">☀️</div>
+                  <div className="bg-gradient-to-br from-green-400/20 to-blue-500/20 p-4 rounded-xl border border-green-400/30 hover:scale-105 transition-transform duration-300 cursor-pointer group path-item-tilt">
+                    <div className="text-2xl mb-2 group-hover:scale-110 transition-transform duration-300">☀️</div>
                     <div className="text-white font-medium">{t('paths.beginner')}</div>
                   </div>
-                  <div className="bg-gradient-to-br from-purple-400/20 to-pink-500/20 p-4 rounded-xl border border-purple-400/30">
-                    <div className="text-2xl mb-2">👴</div>
+                  <div className="bg-gradient-to-br from-purple-400/20 to-pink-500/20 p-4 rounded-xl border border-purple-400/30 hover:scale-105 transition-transform duration-300 cursor-pointer group path-item-tilt">
+                    <div className="text-2xl mb-2 group-hover:scale-110 transition-transform duration-300">👴</div>
                     <div className="text-white font-medium">{t('paths.senior')}</div>
                   </div>
                 </div>
@@ -241,7 +249,7 @@ const Index = () => {
                 <div className="mt-6 text-center">
                   <div className="text-white/60 text-sm mb-2">{t('paths.choose')}</div>
                   <div className="flex justify-center">
-                    <div className="w-8 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"></div>
+                    <div className="w-8 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full animate-pulse"></div>
                   </div>
                 </div>
               </div>
@@ -259,7 +267,7 @@ const Index = () => {
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              {t('benefits.title')} <span className="text-blue-600">Trajecta</span>?
+              {t('benefits.title')} <span className="text-yellow-400">Trajecta</span>?
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               {t('benefits.subtitle')}
@@ -331,9 +339,16 @@ const Index = () => {
                       </div>
                       <Button 
                         className={`w-full ${plan.popular ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700' : ''}`}
-                        onClick={() => setAuthDialog('register')}
+                        onClick={() => {
+                          if (index === 0) { // Basic plan
+                            setAuthDialog('register');
+                          } else { // Premium and Enterprise
+                            // Contact functionality - could open a contact form or redirect
+                            window.open('mailto:contact@trajecta.com?subject=Interesat de planul ' + plan.name, '_blank');
+                          }
+                        }}
                       >
-                        {t('pricing.choose')} {plan.name}
+                        {index === 0 ? t('pricing.demo') : t('pricing.contact')}
                       </Button>
                     </CardContent>
                   </Card>
@@ -354,9 +369,16 @@ const Index = () => {
                       </div>
                       <Button 
                         className="w-full mt-4"
-                        onClick={() => setAuthDialog('register')}
+                        onClick={() => {
+                          if (index === 0) { // Basic plan
+                            setAuthDialog('register');
+                          } else { // Premium and Enterprise
+                            // Contact functionality - could open a contact form or redirect
+                            window.open('mailto:contact@trajecta.com?subject=Interesat de planul ' + plan.name, '_blank');
+                          }
+                        }}
                       >
-                        {t('pricing.start')}
+                        {index === 0 ? t('pricing.demo') : t('pricing.contact')}
                       </Button>
                     </CardContent>
                   </Card>
