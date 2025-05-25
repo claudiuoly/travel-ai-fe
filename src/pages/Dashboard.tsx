@@ -6,8 +6,9 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
-import { Send, Mic, MicOff, LogOut, MapPin, Calendar, DollarSign, Users, Plane, Clock, Star } from 'lucide-react';
+import { Send, LogOut, MapPin, Calendar, DollarSign, Users, Plane, Clock, Star } from 'lucide-react';
 import { getUser, logout, isAuthenticated, sendChatMessage } from '@/lib/auth';
+import { VoiceCall } from '@/components/VoiceCall';
 
 interface Message {
   id: number;
@@ -42,7 +43,6 @@ const Dashboard = () => {
     }
   ]);
   const [inputMessage, setInputMessage] = useState('');
-  const [isVoiceActive, setIsVoiceActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [chatKey, setChatKey] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -257,17 +257,34 @@ const Dashboard = () => {
       title: "Chat Reset",
       description: "Let's plan a new trip together!"
     });
-    
-    console.log('Chat reset - new messages:', [initialMessage]);
   };
 
-  const toggleVoice = () => {
-    setIsVoiceActive(!isVoiceActive);
-    if (!isVoiceActive) {
-      toast({
-        title: "Feature in Development",
-        description: "Voice recognition will be available soon!"
-      });
+  const handleVoiceMessage = (message: string, isUser: boolean) => {
+    // Add voice message to chat
+    addMessage(message, isUser);
+    
+    // If it's a user message from voice, process it like a regular message
+    if (isUser && !isLoading) {
+      setIsLoading(true);
+      const typingId = addMessage('Trajecta is typing...', false, undefined, true);
+
+      setTimeout(async () => {
+        try {
+          const response = await sendChatMessage(message);
+          removeMessage(typingId);
+          addMessage(response.message, false);
+        } catch (error) {
+          removeMessage(typingId);
+          addMessage('Sorry, there was an error. Please try again.', false);
+          toast({
+            title: "Error",
+            description: "Could not process voice message",
+            variant: "destructive"
+          });
+        } finally {
+          setIsLoading(false);
+        }
+      }, 1000);
     }
   };
 
@@ -338,34 +355,40 @@ const Dashboard = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 h-[calc(100vh-8rem)]">
           {/* Sidebar */}
-          <div className="lg:col-span-1 flex flex-col h-full">
+          <div className="lg:col-span-1 flex flex-col h-full space-y-4">
+            {/* Voice Call Component */}
+            <VoiceCall 
+              onMessage={handleVoiceMessage}
+              className="flex-shrink-0"
+            />
+
             <Card className="flex-1 flex flex-col min-h-0">
-              <CardHeader className="flex-shrink-0">
-                <CardTitle className="text-lg">Your Trips</CardTitle>
+              <CardHeader className="flex-shrink-0 pb-2">
+                <CardTitle className="text-base">Your Trips</CardTitle>
               </CardHeader>
-              <CardContent className="flex-1 flex flex-col min-h-0 pb-4">
-                <div className="flex-1 overflow-y-auto space-y-3 mb-4 pr-2 min-h-0 trips-scroll" style={{ maxHeight: 'calc(100vh - 30rem)' }}>
+              <CardContent className="flex-1 flex flex-col min-h-0 pb-3">
+                <div className="flex-1 overflow-y-auto space-y-2 mb-3 pr-2 min-h-0 trips-scroll" style={{ maxHeight: 'calc(100vh - 38rem)' }}>
                   {trips.map((trip) => (
                     <div
                       key={trip.id}
                       onClick={() => handleTripClick(trip)}
-                      className="flex items-center space-x-3 p-3 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors border border-gray-100 hover:border-gray-200"
+                      className="flex items-center space-x-2 p-2 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors border border-gray-100 hover:border-gray-200"
                     >
-                      <div className={`p-2 rounded-full ${getStatusColor(trip.status)}`}>
+                      <div className={`p-1.5 rounded-full ${getStatusColor(trip.status)}`}>
                         {getStatusIcon(trip.status)}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
-                          <p className="font-medium text-sm truncate">{trip.destination}</p>
+                          <p className="font-medium text-xs truncate">{trip.destination}</p>
                           {trip.rating && (
                             <div className="flex items-center space-x-1">
-                              <Star className="w-3 h-3 text-yellow-500 fill-current" />
+                              <Star className="w-2.5 h-2.5 text-yellow-500 fill-current" />
                               <span className="text-xs text-gray-600">{trip.rating}</span>
                             </div>
                           )}
                         </div>
                         <p className="text-xs text-gray-500">{trip.country}</p>
-                        <div className="flex items-center justify-between mt-1">
+                        <div className="flex items-center justify-between mt-0.5">
                           <span className="text-xs text-gray-600">{trip.duration}</span>
                           <span className="text-xs font-medium text-blue-600">{trip.budget}</span>
                         </div>
@@ -374,40 +397,40 @@ const Dashboard = () => {
                   ))}
                 </div>
 
-                <Button className="w-full flex-shrink-0" variant="outline" onClick={handleNewTrip}>
-                  <Plane className="w-4 h-4 mr-2" />
+                <Button className="w-full flex-shrink-0 h-8 text-xs" variant="outline" onClick={handleNewTrip}>
+                  <Plane className="w-3 h-3 mr-1" />
                   Plan New Trip
                 </Button>
               </CardContent>
             </Card>
 
-            <Card className="mt-4 flex-shrink-0">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg">Statistics</CardTitle>
+            <Card className="flex-shrink-0">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base">Statistics</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3 pt-0">
+              <CardContent className="space-y-2 pt-0">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <MapPin className="w-4 h-4 text-blue-600" />
-                    <span className="text-sm">Destinations Visited</span>
+                    <MapPin className="w-3 h-3 text-blue-600" />
+                    <span className="text-xs">Destinations Visited</span>
                   </div>
-                  <span className="font-semibold">12</span>
+                  <span className="font-semibold text-sm">12</span>
                 </div>
                 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <DollarSign className="w-4 h-4 text-green-600" />
-                    <span className="text-sm">Total Savings</span>
+                    <DollarSign className="w-3 h-3 text-green-600" />
+                    <span className="text-xs">Total Savings</span>
                   </div>
-                  <span className="font-semibold">€2,450</span>
+                  <span className="font-semibold text-sm">€2,450</span>
                 </div>
                 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <Users className="w-4 h-4 text-purple-600" />
-                    <span className="text-sm">Group Trips</span>
+                    <Users className="w-3 h-3 text-purple-600" />
+                    <span className="text-xs">Group Trips</span>
                   </div>
-                  <span className="font-semibold">8</span>
+                  <span className="font-semibold text-sm">8</span>
                 </div>
               </CardContent>
             </Card>
@@ -496,14 +519,6 @@ const Dashboard = () => {
                     disabled={isLoading}
                     className="flex-1"
                   />
-                  <Button
-                    onClick={toggleVoice}
-                    variant={isVoiceActive ? "default" : "outline"}
-                    size="icon"
-                    disabled={isLoading}
-                  >
-                    {isVoiceActive ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-                  </Button>
                   <Button 
                     onClick={handleSendMessage} 
                     size="icon"
